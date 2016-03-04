@@ -104,7 +104,7 @@ JNIEXPORT jstring JNICALL Java_com_easivend_evprotocol_EVprotocol_EVPortRegister
  * Signature: (I)Ljava/lang/String;
  */
 JNIEXPORT jstring JNICALL Java_com_easivend_evprotocol_EVprotocol_EVPortRelease
-  (JNIEnv *env, jclass cls, jint j_fd)
+  (JNIEnv *env, jclass cls, jint j_fd) 
 {
     jstring msg;
     char *text = NULL;
