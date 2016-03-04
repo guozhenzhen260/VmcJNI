@@ -1,0 +1,13 @@
+LIBRARY EV_protocol
+EXPORTS
+EV_portRegister
+EV_portRelease
+EV_mdbInit
+EV_mdbEnable
+EV_mdbHeartCheck
+EV_mdbCoinInfoCheck
+EV_mdbBillInfoCheck
+EV_mdbCost
+EV_mdbPayBack
+EV_mdbPayout
+
