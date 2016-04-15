@@ -28,6 +28,8 @@ ST_PORT *yserialPort(int32 fd){
 }
 
 
+
+
 char *yserial_getPortName(int32 fd)
 {
     ST_PORT *port = yserialPort(fd);
@@ -49,14 +51,14 @@ ST_PORT *yserialCreate(char *portName){
     }
 
     len = strlen(portName);
-    port->portName = malloc(len + 1); //分配内存多分配一个字节用于存储结束符
+    port->portName = malloc(len + 2); //分配内存多分配一个字节用于存储结束符
     if(port->portName == NULL){
         free(port);
         port = NULL;
         return NULL;
     }
-    memset(port->portName,0,len + 1);
-    strncpy(port->portName,portName,len);
+    memset(port->portName,0,len + 2);
+    strcpy(port->portName,portName);
     for(i = 0;i < MAX_PORT;i++){
         if(port_arr[i] == NULL){
             port->id = i;
@@ -69,6 +71,9 @@ ST_PORT *yserialCreate(char *portName){
     free(port);
     return NULL;
 }
+
+
+
 
 void yserial_close(int32 fd)
 {
@@ -85,6 +90,20 @@ void yserial_close(int32 fd)
     port_arr[port->id] = NULL;
     free(port->portName);
     free(port);
+}
+
+
+void yserial_closeByName(char *portName)
+{
+	int i ;
+	ST_PORT *port;
+	
+	for(i = 0;i < MAX_PORT;i++){
+		port = port_arr[i];
+		if(strcmp(port->portName,portName) == 0){
+			yserial_close(port->id);
+		}
+	}
 }
 
 

@@ -111,6 +111,9 @@ EV_EXPORT int32   EV_API  EV_portRegister(int8 *portName);
 EV_EXPORT void    EV_API  EV_portRelease(int32 fd);
 
 
+EV_EXPORT void   EV_API  EV_portReleaseByName(char *portName);
+
+
 //============================MDB设备初始化接口============================================================//
 
 /*********************************************************************************************************

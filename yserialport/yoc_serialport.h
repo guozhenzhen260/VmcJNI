@@ -15,7 +15,10 @@
 
 
 int yserial_open(char *portName);
-void yserial_close(int fd);
+
+void yserial_close(int id);
+void yserial_closeByName(char *portName);
+
 char *yserial_getPortName(int32 fd);
 uint32 yserial_read (int fd,char *pData,uint32 len);
 uint32 yserial_write (int fd,const char* pData, uint32 len);

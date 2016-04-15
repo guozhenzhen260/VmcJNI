@@ -53,6 +53,19 @@ void   EV_API  EV_portRelease(int32 fd)
 }
 
 
+void   EV_API  EV_portReleaseByName(char *portName)
+{
+	if(portName == NULL){
+		EV_LOGW("Port:is null!\n");
+		return;
+	}
+
+    yserial_closeByName(portName);
+    EV_LOGI("Port_no[%s]:released!\n",portName);
+}
+
+
+
 
 
 
