@@ -100,6 +100,10 @@ void yserial_closeByName(char *portName)
 	
 	for(i = 0;i < MAX_PORT;i++){
 		port = port_arr[i];
+		if(port == NULL || port->portName == NULL){
+			continue;
+		}
+		EV_LOGI("yserial_close:port = %s\n",port->portName);
 		if(strcmp(port->portName,portName) == 0){
 			yserial_close(port->id);
 		}

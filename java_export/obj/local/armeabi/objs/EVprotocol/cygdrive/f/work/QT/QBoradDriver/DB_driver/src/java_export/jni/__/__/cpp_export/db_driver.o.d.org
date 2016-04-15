@@ -1,0 +1,242 @@
+F:/work/QT/QBoradDriver/DB_driver/src/java_export/obj/local/armeabi/objs/EVprotocol//cygdrive/f/work/QT/QBoradDriver/DB_driver/src/java_export/jni/__/__/cpp_export/db_driver.o: \
+ F:/work/QT/QBoradDriver/DB_driver/src/java_export/jni/../../cpp_export/db_driver.c \
+ F:/work/QT/QBoradDriver/DB_driver/src/java_export/jni/../../cpp_export/db_driver.h \
+ F:/work/QT/QBoradDriver/DB_driver/src/java_export/jni/../../yserialport/yoc_serialport.h \
+ F:/work/QT/QBoradDriver/DB_driver/src/java_export/jni/../../yserialport/unix_yocSerialPort.h \
+ F:/work/QT/QBoradDriver/DB_driver/src/java_export/jni/../../yserialport/yoc_serialbase.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/stdio.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/sys/cdefs.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/sys/cdefs_elf.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/android/api-level.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/sys/types.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/stdint.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/sys/_types.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/machine/_types.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/sys/_wchar_limits.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/linux/posix_types.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/linux/stddef.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/linux/compiler.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/asm/posix_types.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/asm/types.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/linux/types.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/machine/kernel.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/sys/sysmacros.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/stdlib.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/string.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/malloc.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/alloca.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/strings.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/memory.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/unistd.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/sys/select.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/sys/time.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/linux/time.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/signal.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/limits.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/sys/limits.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/linux/limits.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/machine/internal_types.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/machine/limits.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/sys/syslimits.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/asm/page.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/asm/signal.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/asm-generic/signal.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/asm/siginfo.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/asm-generic/siginfo.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/sys/sysconf.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/linux/capability.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/pathconf.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/sys/stat.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/linux/stat.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/endian.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/sys/endian.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/machine/endian.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/fcntl.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/linux/fcntl.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/asm/fcntl.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/asm-generic/fcntl.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/errno.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/linux/errno.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/asm/errno.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/asm-generic/errno.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/asm-generic/errno-base.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/termios.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/sys/ioctl.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/linux/ioctl.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/asm/ioctl.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/asm-generic/ioctl.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/asm/ioctls.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/asm/termbits.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/sys/ioctl_compat.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/linux/termios.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/asm/termios.h \
+ F:/work/QT/QBoradDriver/DB_driver/src/java_export/jni/../../general/ev_config.h \
+ F:/work/QT/QBoradDriver/DB_driver/src/java_export/jni/../../general/LOGC.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/ctype.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/time.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/syslog.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/pthread.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/sched.h \
+ F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/android/log.h \
+ F:/work/QT/QBoradDriver/DB_driver/src/java_export/jni/../../db_api/mdb_api.h \
+ F:/work/QT/QBoradDriver/DB_driver/src/java_export/jni/../../cpp_export/db_driver.h
+
+F:/work/QT/QBoradDriver/DB_driver/src/java_export/jni/../../cpp_export/db_driver.h:
+
+F:/work/QT/QBoradDriver/DB_driver/src/java_export/jni/../../yserialport/yoc_serialport.h:
+
+F:/work/QT/QBoradDriver/DB_driver/src/java_export/jni/../../yserialport/unix_yocSerialPort.h:
+
+F:/work/QT/QBoradDriver/DB_driver/src/java_export/jni/../../yserialport/yoc_serialbase.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/stdio.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/sys/cdefs.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/sys/cdefs_elf.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/android/api-level.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/sys/types.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/stdint.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/sys/_types.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/machine/_types.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/sys/_wchar_limits.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/linux/posix_types.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/linux/stddef.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/linux/compiler.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/asm/posix_types.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/asm/types.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/linux/types.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/machine/kernel.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/sys/sysmacros.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/stdlib.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/string.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/malloc.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/alloca.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/strings.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/memory.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/unistd.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/sys/select.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/sys/time.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/linux/time.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/signal.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/limits.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/sys/limits.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/linux/limits.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/machine/internal_types.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/machine/limits.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/sys/syslimits.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/asm/page.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/asm/signal.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/asm-generic/signal.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/asm/siginfo.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/asm-generic/siginfo.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/sys/sysconf.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/linux/capability.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/pathconf.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/sys/stat.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/linux/stat.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/endian.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/sys/endian.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/machine/endian.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/fcntl.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/linux/fcntl.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/asm/fcntl.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/asm-generic/fcntl.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/errno.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/linux/errno.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/asm/errno.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/asm-generic/errno.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/asm-generic/errno-base.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/termios.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/sys/ioctl.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/linux/ioctl.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/asm/ioctl.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/asm-generic/ioctl.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/asm/ioctls.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/asm/termbits.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/sys/ioctl_compat.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/linux/termios.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/asm/termios.h:
+
+F:/work/QT/QBoradDriver/DB_driver/src/java_export/jni/../../general/ev_config.h:
+
+F:/work/QT/QBoradDriver/DB_driver/src/java_export/jni/../../general/LOGC.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/ctype.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/time.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/syslog.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/pthread.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/sched.h:
+
+F:/work/JAVA/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/android/log.h:
+
+F:/work/QT/QBoradDriver/DB_driver/src/java_export/jni/../../db_api/mdb_api.h:
+
+F:/work/QT/QBoradDriver/DB_driver/src/java_export/jni/../../cpp_export/db_driver.h:
