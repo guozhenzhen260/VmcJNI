@@ -20,6 +20,7 @@
 #include "mdb_api.h"
 #include "bento_api.h"
 #include "Column_api.h"
+#include "lift_api.h"
 
 
 int32   EV_API  EV_portRegister(int8 *portName)
@@ -367,6 +368,27 @@ int32  EV_API  EV_columnOpen(ST_COL_OPEN_REQ *req,ST_COL_OPEN_RPT *rpt)
     EV_LOGD("EV_columnOpen:res=%d,result=%02x",res,rpt->result);
     return res;
 }
+
+
+
+
+
+/*********************************************************************************************************
+** Function name	:		EV_bentoOpen
+** Descriptions		:		BENTO快递柜开门接口
+** input parameters	:       req 请求包结构体指针 rpt 回应包结构体指针
+** output parameters:		无
+** Returned value	:		0通信失败  1通信成功
+*********************************************************************************************************/
+int32  EV_API  EV_liftVendout(ST_LF_VENDOUT_REQ *req,ST_LF_VENDOUT_RPT *rpt)
+{
+    int32 res;
+    EV_LOGD("EV_liftVendout:req=%x\n",(unsigned int)req);
+    res = LIFT_vendout(req,rpt);
+    EV_LOGD("EV_liftVendout:res=%d",res);
+    return res;
+}
+
 
 
 

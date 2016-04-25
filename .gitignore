@@ -32,3 +32,4 @@
 *.dSYM/
 evdllso*
 si/
+java_export/obj
