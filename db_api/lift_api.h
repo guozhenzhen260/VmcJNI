@@ -48,7 +48,7 @@
 
 
 
-uint8 LIFT_vendout(ST_LF_VENDOUT_REQ *req,ST_LF_VENDOUT_RPT *rpt);
+uint8 LIFT_vendout(ST_COL_OPEN_REQ *req,ST_COL_OPEN_RPT *rpt);
 
 
 #endif // BENTO_API_H

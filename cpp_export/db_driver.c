@@ -380,7 +380,7 @@ int32  EV_API  EV_columnOpen(ST_COL_OPEN_REQ *req,ST_COL_OPEN_RPT *rpt)
 ** output parameters:		无
 ** Returned value	:		0通信失败  1通信成功
 *********************************************************************************************************/
-int32  EV_API  EV_liftVendout(ST_LF_VENDOUT_REQ *req,ST_LF_VENDOUT_RPT *rpt)
+int32  EV_API  EV_liftVendout(ST_COL_OPEN_REQ *req,ST_COL_OPEN_RPT *rpt)
 {
     int32 res;
     EV_LOGD("EV_liftVendout:req=%x\n",(unsigned int)req);

@@ -441,7 +441,7 @@ uint8 LIFT_vendoutReq(uint8 bin,uint8 row,uint8 column)
 
 
 
-uint8 LIFT_vendout(ST_LF_VENDOUT_REQ *req,ST_LF_VENDOUT_RPT *rpt)
+uint8 LIFT_vendout(ST_COL_OPEN_REQ *req,ST_COL_OPEN_RPT *rpt)
 {
 	int32 ret;
 	ST_LIFT_MSG *msg = &liftMsg;
@@ -461,7 +461,7 @@ uint8 LIFT_vendout(ST_LF_VENDOUT_REQ *req,ST_LF_VENDOUT_RPT *rpt)
         return 0;
     }
 
-    memset((void *)rpt,0,sizeof(ST_LF_VENDOUT_RPT));
+    memset((void *)rpt,0,sizeof(ST_COL_OPEN_RPT));
     rpt->addr = req->addr;
     rpt->fd = req->fd;
     rpt->no = req->no;
