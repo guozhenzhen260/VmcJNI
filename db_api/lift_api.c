@@ -315,7 +315,7 @@ uint8 LIFT_vmcVedingResult(uint8 bin)
 		}
 	}
 	else{
-		return LIFT_VENDOUT_DATAERR;
+		return 0;
 	}
 }
 
@@ -402,8 +402,8 @@ uint8 LIFT_vmcChuchou(uint8 bin,uint8 flag)
 //返回0:失败，1：成功，2：数据错误 3：无货 4：卡货 5：取货门未开启 6：货物未取走 7：未定义错误	0xff：通信失败
 uint8 LIFT_vendoutReq(uint8 bin,uint8 row,uint8 column)
 {
-	uint8 res,flow,err;
-	uint32 timeout;
+	uint8 res,res1,flow,err,tradeResult,vendoutOk;
+	int32 timeout;
 	timeout = 30;flow = 0;
 	while(timeout > 0){
 		res = LIFT_vmcStatusReq(bin);
@@ -418,55 +418,55 @@ uint8 LIFT_vendoutReq(uint8 bin,uint8 row,uint8 column)
 			}			
 		}
 	}
-	
 	if(flow == 0){ //有问题
 		return res;
 	}
-	
-	//进行出货操作
-	timeout = 60;
+
+
+	vendoutOk = 0;
+	tradeResult = LIFT_VENDOUT_FAIL;
+	timeout = 300 + row * 3;
 	while(timeout > 0){
-		res = LIFT_vmcVendingReq(bin,row,column);
-		if(res == 1){
-			EV_msleep(500);
-			res = LIFT_vmcVendingResultByTime(bin,5000);
-			if(res == LIFT_VENDOUT_GOODS_NOT_TAKE){ //货物没取走
-				EV_msleep(2000);
+		if(vendoutOk == 0){
+			res = LIFT_vmcVendingReq(bin,row,column);
+			if(res != 1){
+				EV_msleep(50);
+				res1 = LIFT_vmcVedingResult(bin);
+				if(res1 == LIFT_VENDOUT_VENDING){
+					vendoutOk = 1;
+				}
+			}
+			else{
+				vendoutOk = 1;
+			}
+
+			if(vendoutOk == 0){
+				EV_msleep(1000);
 				timeout--;
+				continue;
+			}
+		}
+		
+		res = LIFT_vmcVedingResult(bin);//检测出货结果
+		if(res > 0 && res != LIFT_VENDOUT_VENDING){ //出货结果
+			if(res == LIFT_VENDOUT_GOODS_NOT_TAKE){
+				EV_msleep(1000);
 				timeout--;
-				err = LIFT_VENDOUT_GOODS_NOT_TAKE;
+				tradeResult = LIFT_VENDOUT_GOODS_NOT_TAKE;
+				vendoutOk = 0;
 				continue;
 			}
 			else{
-				flow = 1;break;
+				return res;
 			}
 		}
 		else{
-			res = LIFT_vmcVedingResult(bin);
-			if(res == LIFT_VENDOUT_VENDING){
-				flow = 1;break;
-			}
 			EV_msleep(1000);
 			timeout--;
 		}
 	}
-	
-	if(flow == 0){return err == LIFT_VENDOUT_GOODS_NOT_TAKE ? LIFT_VENDOUT_GOODS_NOT_TAKE : LIFT_VENDOUT_FAIL;}
-	
-	timeout = 50 + row * 3;
-	while(timeout > 0){
-		res = LIFT_vmcVedingResult(bin);//检测出货结果
-		if(res > 0 && res != LIFT_VENDOUT_VENDING){ //出货结果
-			return res;
-		}
-		else{
-			if(res > 0){
-				EV_msleep(1000);
-				timeout--;
-			}
-		}
-	}
-	return LIFT_VENDOUT_FAIL;
+
+	return tradeResult;
 }
 
 
