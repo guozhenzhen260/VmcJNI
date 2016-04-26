@@ -34,6 +34,29 @@ ST_LIFT_MSG liftMsg;
 
 
 
+#define LIFT_STATUS_COM_ERR		0x1F
+#define LIFT_STATUS_FAULT		0x12
+#define LIFT_STATUS_BUSY		0x11
+#define LIFT_STATUS_NORMAL		0x10
+
+
+
+#define LIFT_VENDOUT_COM_ERR			0x1F		//通信故障
+#define LIFT_VENDOUT_FAULT				0x12		//升降机故障
+#define LIFT_VENDOUT_BUSY				0x11		//升降机忙
+#define LIFT_VENDOUT_FAIL				0			//出货失败 通信失败
+#define LIFT_VENDOUT_SUC				1			//出货成功
+#define LIFT_VENDOUT_DATAERR			2			//数据错误
+#define LIFT_VENDOUT_EMPTY				3			//无货
+#define LIFT_VENDOUT_STUCK				4  			//卡货
+#define LIFT_VNEDOUT_DOOR_NOT_OPEN		5			//取货门未开启
+#define LIFT_VENDOUT_GOODS_NOT_TAKE		6			//货物未取走
+#define LIFT_VENDOUT_OTHER_FAULT		7			//其他故障
+#define LIFT_VENDOUT_VENDING			0x88		//正在出货
+
+
+
+
 /*********************************************************************************************************
 ** Function name:     	crc16
 ** Descriptions:	    CRC校验和
@@ -160,8 +183,8 @@ static uint8 LIFT_send(ST_LIFT_MSG *msg)
 	LIFT_LOG(1,sendbuf,in);
 	LIFT_clear();
 	res = LIFT_recv(msg,2000);
-	LIFT_LOG(1,msg->recvbuf,msg->recvlen);
-	return 0;
+	LIFT_LOG(2,msg->recvbuf,msg->recvlen);
+	return res;
 }
 
 
@@ -200,20 +223,25 @@ uint8 LIFT_vmcStatusReq(uint8 bin)
 	if(res == 1 && msg->recvbuf[I_MT] == GCC_STATUS_ACK){
 		//stLiftTable.Error_OVERALLUINT = msg->recvbuf[5];
 		if(msg->recvbuf[5] == 0x01){
-			return 0x11; //忙
+			return LIFT_STATUS_BUSY; //忙
 		}
 
 		if(msg->recvbuf[6] == 0x00){
-			return 0x10; //正常
+			return LIFT_STATUS_NORMAL; //正常
 		}
 		else{
-			return 0x12; //故障
+			return LIFT_STATUS_FAULT; //故障
 		}
 	}
 	else{
-		return 0x1F; //通信故障
+		return LIFT_STATUS_COM_ERR; //通信故障
 	}
 }
+
+
+
+
+
 
 
 uint8 LIFT_vmcReset(uint8 bin)
@@ -234,6 +262,9 @@ uint8 LIFT_vmcReset(uint8 bin)
 	}
 }
 
+
+
+
 //返回0:失败，1：成功，2：数据错误 3：无货 4：卡货 5：取货门未开启 6：货物未取走 7：未定义错误	0xff：通信失败
 // 0 未接受 1成功 0x88正在出货
 uint8 LIFT_vmcVedingResult(uint8 bin)
@@ -248,44 +279,43 @@ uint8 LIFT_vmcVedingResult(uint8 bin)
 	res =  LIFT_send(msg);
 	if(res == 1 && msg->recvbuf[I_MT] == GCC_VENDINGRESULT_ACK){
 		if(msg->recvbuf[I_DATA] != 0x00){
-			return 0x88;
+			return LIFT_VENDOUT_VENDING;
 		}
 		if(msg->recvbuf[I_DATA + 1] == 0x00){
-			return 1;
+			return LIFT_VENDOUT_SUC;
 		}
 
 		temp = msg->recvbuf[I_DATA + 2];
 		if(temp == 0x00){
-			return 1;
+			return LIFT_VENDOUT_SUC;
 		}
 		else if(temp == 0x01){
-			return 2;
+			return LIFT_VENDOUT_DATAERR;
 		}
 		else if(temp == 0x02){
-			return 3;
+			return LIFT_VENDOUT_EMPTY;
 		}
 		else if(temp == 0x03){
-			return 4;
+			return LIFT_VENDOUT_STUCK;
 		}
 		else if(temp == 0x04){
-			return 5;
+			return LIFT_VNEDOUT_DOOR_NOT_OPEN;
 		}
 		else if(temp == 0x05){
-			return 6;
+			return LIFT_VENDOUT_GOODS_NOT_TAKE;
 		}
 		else if(temp == 0x06){
-			return 7;
+			return LIFT_VENDOUT_OTHER_FAULT;
 		}
 		else if(temp == 0x07){
-			return 8;
+			return LIFT_VENDOUT_OTHER_FAULT;
 		}
 		else{
-			return 9;
+			return LIFT_VENDOUT_OTHER_FAULT;
 		}
-		//return 9;
 	}
 	else{
-		return 0;
+		return LIFT_VENDOUT_DATAERR;
 	}
 }
 
@@ -367,6 +397,8 @@ uint8 LIFT_vmcChuchou(uint8 bin,uint8 flag)
 
 
 
+
+
 //返回0:失败，1：成功，2：数据错误 3：无货 4：卡货 5：取货门未开启 6：货物未取走 7：未定义错误	0xff：通信失败
 uint8 LIFT_vendoutReq(uint8 bin,uint8 row,uint8 column)
 {
@@ -375,12 +407,12 @@ uint8 LIFT_vendoutReq(uint8 bin,uint8 row,uint8 column)
 	timeout = 30;flow = 0;
 	while(timeout > 0){
 		res = LIFT_vmcStatusReq(bin);
-		if(res == 0x10){
+		if(res == LIFT_STATUS_NORMAL){
 			flow = 1;
 			break;
 		}
 		else{
-			if(res != 0x1F){
+			if(res != LIFT_STATUS_COM_ERR){
 				EV_msleep(1000);
 				timeout--;
 			}			
@@ -398,11 +430,11 @@ uint8 LIFT_vendoutReq(uint8 bin,uint8 row,uint8 column)
 		if(res == 1){
 			EV_msleep(500);
 			res = LIFT_vmcVendingResultByTime(bin,5000);
-			if(res == 6){ //货物没取走
+			if(res == LIFT_VENDOUT_GOODS_NOT_TAKE){ //货物没取走
 				EV_msleep(2000);
 				timeout--;
 				timeout--;
-				err = 6;
+				err = LIFT_VENDOUT_GOODS_NOT_TAKE;
 				continue;
 			}
 			else{
@@ -411,7 +443,7 @@ uint8 LIFT_vendoutReq(uint8 bin,uint8 row,uint8 column)
 		}
 		else{
 			res = LIFT_vmcVedingResult(bin);
-			if(res == 0x88){
+			if(res == LIFT_VENDOUT_VENDING){
 				flow = 1;break;
 			}
 			EV_msleep(1000);
@@ -419,12 +451,12 @@ uint8 LIFT_vendoutReq(uint8 bin,uint8 row,uint8 column)
 		}
 	}
 	
-	if(flow == 0){return err == 6 ? 6 : 0;}
+	if(flow == 0){return err == LIFT_VENDOUT_GOODS_NOT_TAKE ? LIFT_VENDOUT_GOODS_NOT_TAKE : LIFT_VENDOUT_FAIL;}
 	
 	timeout = 50 + row * 3;
 	while(timeout > 0){
 		res = LIFT_vmcVedingResult(bin);//检测出货结果
-		if(res > 0 && res != 0x88){ //出货结果
+		if(res > 0 && res != LIFT_VENDOUT_VENDING){ //出货结果
 			return res;
 		}
 		else{
@@ -434,7 +466,7 @@ uint8 LIFT_vendoutReq(uint8 bin,uint8 row,uint8 column)
 			}
 		}
 	}
-	return 0;
+	return LIFT_VENDOUT_FAIL;
 }
 
 
