@@ -447,30 +447,25 @@ JNIEXPORT jstring JNICALL Java_com_easivend_evprotocol_EVprotocol_EVtrade
     req.fd = fd;
     req.addr = addr;
     req.no = box;
-	req.goc=goc;
-	//EV_LOGD("EV_APPcolumnOpen:columntype=%d,fd=%d,addr=%d,no=%d,goc=%d\n",columntype,fd,addr,box,goc);
-	switch(columntype)
-	{
+	req.goc= goc;
+
+	switch(columntype){
 		case 1:
 			res = EV_columnOpen(&req,&rpt);
 			break;
+		case 3: case 4:
+			res = EV_liftVendout(&req,&rpt);
+			break;
+		default:res = 0;break;
 	}
     
-	
-
-
     root=cJSON_CreateObject();
     entry = cJSON_CreateObject();
     cJSON_AddItemToObject(root, JSON_HEAD, entry );
     cJSON_AddNumberToObject(entry,JSON_TYPE,EV_COLUMN_OPEN);
-	
-
     cJSON_AddNumberToObject(entry,"port_id",rpt.fd);
     cJSON_AddNumberToObject(entry,"addr",rpt.addr);
     cJSON_AddNumberToObject(entry,"box",rpt.no);
-	
-
-
     if(res == 1)
 	{
         cJSON_AddNumberToObject(entry,"is_success",1);
@@ -482,12 +477,8 @@ JNIEXPORT jstring JNICALL Java_com_easivend_evprotocol_EVprotocol_EVtrade
         cJSON_AddNumberToObject(entry,"result",0);
     }
 	
-
-
     text = cJSON_Print(root);
     cJSON_Delete(root);
-	
-
     if(text != NULL){
         msg = (*env)->NewStringUTF(env,text);
         free(text);

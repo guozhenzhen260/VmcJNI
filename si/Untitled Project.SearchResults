@@ -1,2 +1,0 @@
-----  yserial_close Matches (1 in 1 files) ----
-Db_driver.c (cpp_export):    yserial_close(fd);
