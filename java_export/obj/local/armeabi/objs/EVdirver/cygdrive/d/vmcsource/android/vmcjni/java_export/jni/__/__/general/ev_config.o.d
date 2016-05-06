@@ -1,7 +1,7 @@
-/cygdrive/d/vmcsource/android/vmcjni/java_export/obj/local/armeabi/objs/EVdirver//cygdrive/d/vmcsource/android/vmcjni/java_export/jni/__/__/general/ev_config.o: \
- /cygdrive/d/vmcsource/android/vmcjni/java_export/jni/../../general/ev_config.c \
- /cygdrive/d/vmcsource/android/vmcjni/java_export/jni/../../general/ev_config.h \
- /cygdrive/d/vmcsource/android/vmcjni/java_export/jni/../../general/LOGC.h \
+/cygdrive/d/VMCSource/android/VmcJNI/java_export/obj/local/armeabi/objs/EVdirver//cygdrive/d/VMCSource/android/VmcJNI/java_export/jni/__/__/general/ev_config.o: \
+ /cygdrive/d/VMCSource/android/VmcJNI/java_export/jni/../../general/ev_config.c \
+ /cygdrive/d/VMCSource/android/VmcJNI/java_export/jni/../../general/ev_config.h \
+ /cygdrive/d/VMCSource/android/VmcJNI/java_export/jni/../../general/LOGC.h \
  /cygdrive/c/android/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/stdio.h \
  /cygdrive/c/android/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/sys/cdefs.h \
  /cygdrive/c/android/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/sys/cdefs_elf.h \
@@ -65,9 +65,9 @@
  /cygdrive/c/android/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/sched.h \
  /cygdrive/c/android/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/android/log.h
 
-/cygdrive/d/vmcsource/android/vmcjni/java_export/jni/../../general/ev_config.h:
+/cygdrive/d/VMCSource/android/VmcJNI/java_export/jni/../../general/ev_config.h:
 
-/cygdrive/d/vmcsource/android/vmcjni/java_export/jni/../../general/LOGC.h:
+/cygdrive/d/VMCSource/android/VmcJNI/java_export/jni/../../general/LOGC.h:
 
 /cygdrive/c/android/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/stdio.h:
 

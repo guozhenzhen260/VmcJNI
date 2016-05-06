@@ -1,13 +1,13 @@
-/cygdrive/d/vmcsource/android/vmcjni/java_export/obj/local/armeabi/objs/EVdirver//cygdrive/d/vmcsource/android/vmcjni/java_export/jni/__/com_easivend_evprotocol_EVprotocol.o: \
- /cygdrive/d/vmcsource/android/vmcjni/java_export/jni/../com_easivend_evprotocol_EVprotocol.c \
+/cygdrive/d/VMCSource/android/VmcJNI/java_export/obj/local/armeabi/objs/EVdirver//cygdrive/d/VMCSource/android/VmcJNI/java_export/jni/__/com_easivend_evprotocol_EVprotocol.o: \
+ /cygdrive/d/VMCSource/android/VmcJNI/java_export/jni/../com_easivend_evprotocol_EVprotocol.c \
  /cygdrive/c/android/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/jni.h \
  /cygdrive/c/android/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/sys/cdefs.h \
  /cygdrive/c/android/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/sys/cdefs_elf.h \
  /cygdrive/c/android/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/android/api-level.h \
- /cygdrive/d/vmcsource/android/vmcjni/java_export/jni/../../cpp_export/db_driver.h \
- /cygdrive/d/vmcsource/android/vmcjni/java_export/jni/../../db_api/db_serial.h \
- /cygdrive/d/vmcsource/android/vmcjni/java_export/jni/../../db_api/db_json.h \
- /cygdrive/d/vmcsource/android/vmcjni/java_export/jni/../../general/cJSON.h \
+ /cygdrive/d/VMCSource/android/VmcJNI/java_export/jni/../../cpp_export/db_driver.h \
+ /cygdrive/d/VMCSource/android/VmcJNI/java_export/jni/../../db_api/db_serial.h \
+ /cygdrive/d/VMCSource/android/VmcJNI/java_export/jni/../../db_api/db_json.h \
+ /cygdrive/d/VMCSource/android/VmcJNI/java_export/jni/../../general/cJSON.h \
  /cygdrive/c/android/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/stdio.h \
  /cygdrive/c/android/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/sys/types.h \
  /cygdrive/c/android/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/stdint.h \
@@ -22,9 +22,9 @@
  /cygdrive/c/android/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/linux/types.h \
  /cygdrive/c/android/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/machine/kernel.h \
  /cygdrive/c/android/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/sys/sysmacros.h \
- /cygdrive/d/vmcsource/android/vmcjni/java_export/jni/../../yserialport/yoc_serialport.h \
- /cygdrive/d/vmcsource/android/vmcjni/java_export/jni/../../yserialport/unix_yocSerialPort.h \
- /cygdrive/d/vmcsource/android/vmcjni/java_export/jni/../../yserialport/yoc_serialbase.h \
+ /cygdrive/d/VMCSource/android/VmcJNI/java_export/jni/../../yserialport/yoc_serialport.h \
+ /cygdrive/d/VMCSource/android/VmcJNI/java_export/jni/../../yserialport/unix_yocSerialPort.h \
+ /cygdrive/d/VMCSource/android/VmcJNI/java_export/jni/../../yserialport/yoc_serialbase.h \
  /cygdrive/c/android/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/stdlib.h \
  /cygdrive/c/android/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/string.h \
  /cygdrive/c/android/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/malloc.h \
@@ -74,8 +74,8 @@
  /cygdrive/c/android/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/sys/ioctl_compat.h \
  /cygdrive/c/android/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/linux/termios.h \
  /cygdrive/c/android/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/asm/termios.h \
- /cygdrive/d/vmcsource/android/vmcjni/java_export/jni/../../general/ev_config.h \
- /cygdrive/d/vmcsource/android/vmcjni/java_export/jni/../../general/LOGC.h \
+ /cygdrive/d/VMCSource/android/VmcJNI/java_export/jni/../../general/ev_config.h \
+ /cygdrive/d/VMCSource/android/VmcJNI/java_export/jni/../../general/LOGC.h \
  /cygdrive/c/android/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/ctype.h \
  /cygdrive/c/android/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/time.h \
  /cygdrive/c/android/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/syslog.h \
@@ -91,13 +91,13 @@
 
 /cygdrive/c/android/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/android/api-level.h:
 
-/cygdrive/d/vmcsource/android/vmcjni/java_export/jni/../../cpp_export/db_driver.h:
+/cygdrive/d/VMCSource/android/VmcJNI/java_export/jni/../../cpp_export/db_driver.h:
 
-/cygdrive/d/vmcsource/android/vmcjni/java_export/jni/../../db_api/db_serial.h:
+/cygdrive/d/VMCSource/android/VmcJNI/java_export/jni/../../db_api/db_serial.h:
 
-/cygdrive/d/vmcsource/android/vmcjni/java_export/jni/../../db_api/db_json.h:
+/cygdrive/d/VMCSource/android/VmcJNI/java_export/jni/../../db_api/db_json.h:
 
-/cygdrive/d/vmcsource/android/vmcjni/java_export/jni/../../general/cJSON.h:
+/cygdrive/d/VMCSource/android/VmcJNI/java_export/jni/../../general/cJSON.h:
 
 /cygdrive/c/android/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/stdio.h:
 
@@ -127,11 +127,11 @@
 
 /cygdrive/c/android/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/sys/sysmacros.h:
 
-/cygdrive/d/vmcsource/android/vmcjni/java_export/jni/../../yserialport/yoc_serialport.h:
+/cygdrive/d/VMCSource/android/VmcJNI/java_export/jni/../../yserialport/yoc_serialport.h:
 
-/cygdrive/d/vmcsource/android/vmcjni/java_export/jni/../../yserialport/unix_yocSerialPort.h:
+/cygdrive/d/VMCSource/android/VmcJNI/java_export/jni/../../yserialport/unix_yocSerialPort.h:
 
-/cygdrive/d/vmcsource/android/vmcjni/java_export/jni/../../yserialport/yoc_serialbase.h:
+/cygdrive/d/VMCSource/android/VmcJNI/java_export/jni/../../yserialport/yoc_serialbase.h:
 
 /cygdrive/c/android/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/stdlib.h:
 
@@ -231,9 +231,9 @@
 
 /cygdrive/c/android/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/asm/termios.h:
 
-/cygdrive/d/vmcsource/android/vmcjni/java_export/jni/../../general/ev_config.h:
+/cygdrive/d/VMCSource/android/VmcJNI/java_export/jni/../../general/ev_config.h:
 
-/cygdrive/d/vmcsource/android/vmcjni/java_export/jni/../../general/LOGC.h:
+/cygdrive/d/VMCSource/android/VmcJNI/java_export/jni/../../general/LOGC.h:
 
 /cygdrive/c/android/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/ctype.h:
 

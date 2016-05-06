@@ -1,5 +1,5 @@
-/cygdrive/d/vmcsource/android/vmcjni/java_export/obj/local/armeabi/objs/EVdirver//cygdrive/d/vmcsource/android/vmcjni/java_export/jni/__/__/ytimer/timer.o: \
- /cygdrive/d/vmcsource/android/vmcjni/java_export/jni/../../ytimer/timer.c \
+/cygdrive/d/VMCSource/android/VmcJNI/java_export/obj/local/armeabi/objs/EVdirver//cygdrive/d/VMCSource/android/VmcJNI/java_export/jni/__/__/ytimer/timer.o: \
+ /cygdrive/d/VMCSource/android/VmcJNI/java_export/jni/../../ytimer/timer.c \
  /cygdrive/c/android/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/stdio.h \
  /cygdrive/c/android/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/sys/cdefs.h \
  /cygdrive/c/android/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/sys/cdefs_elf.h \
@@ -23,7 +23,7 @@
  /cygdrive/c/android/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/alloca.h \
  /cygdrive/c/android/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/strings.h \
  /cygdrive/c/android/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/memory.h \
- /cygdrive/d/vmcsource/android/vmcjni/java_export/jni/../../ytimer/timer.h \
+ /cygdrive/d/VMCSource/android/VmcJNI/java_export/jni/../../ytimer/timer.h \
  /cygdrive/c/android/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/pthread.h \
  /cygdrive/c/android/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/time.h \
  /cygdrive/c/android/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/sys/time.h \
@@ -93,7 +93,7 @@
 
 /cygdrive/c/android/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/memory.h:
 
-/cygdrive/d/vmcsource/android/vmcjni/java_export/jni/../../ytimer/timer.h:
+/cygdrive/d/VMCSource/android/VmcJNI/java_export/jni/../../ytimer/timer.h:
 
 /cygdrive/c/android/android-ndk-r9d/platforms/android-3/arch-arm/usr/include/pthread.h:
 

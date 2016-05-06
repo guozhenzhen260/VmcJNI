@@ -314,6 +314,112 @@ JNIEXPORT jstring JNICALL Java_com_easivend_evprotocol_EVprotocol_EVBentoLight
 
 }
 
+/*
+ * Class:     com_easivend_evprotocol_EVprotocol
+ * Method:    EVBentoCool
+ * Signature: (III)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_com_easivend_evprotocol_EVprotocol_EVBentoCool
+  (JNIEnv *env, jclass cls, jint fd, jint addr, jint opt)
+{
+    ST_BT_LIGHT_REQ req;
+    ST_BT_LIGHT_RPT rpt;
+    int res;
+    jstring msg;
+    char *text = NULL;
+    cJSON *root,*entry;
+
+    req.fd = fd;
+    req.addr =addr;
+    req.opt = opt;
+
+    res = EV_bentoCool(&req,&rpt);
+    root=cJSON_CreateObject();
+    entry = cJSON_CreateObject();
+    cJSON_AddItemToObject(root, JSON_HEAD, entry);
+    cJSON_AddNumberToObject(entry,JSON_TYPE,EV_BENTO_COOL);
+
+    cJSON_AddNumberToObject(entry,"port_id",rpt.fd);
+    cJSON_AddNumberToObject(entry,"addr",rpt.addr);
+    cJSON_AddNumberToObject(entry,"opt",rpt.opt);
+
+    if(res == 1){
+        cJSON_AddNumberToObject(entry,"is_success",1);
+        cJSON_AddNumberToObject(entry,"result",rpt.res);
+    }
+    else{
+        cJSON_AddNumberToObject(entry,"is_success",0);
+        cJSON_AddNumberToObject(entry,"result",0);
+    }
+
+    text = cJSON_Print(root);
+    cJSON_Delete(root);
+    if(text != NULL){
+        msg = (*env)->NewStringUTF(env,text);
+        free(text);
+    }
+    else{
+        msg = (*env)->NewStringUTF(env,"{\"EV_json\":{\"EV_type\":9999}}");
+    }
+
+    return msg;
+
+
+}
+
+/*
+ * Class:     com_easivend_evprotocol_EVprotocol
+ * Method:    EVBentoHot
+ * Signature: (III)Ljava/lang/String; 
+ */
+JNIEXPORT jstring JNICALL Java_com_easivend_evprotocol_EVprotocol_EVBentoHot
+  (JNIEnv *env, jclass cls, jint fd, jint addr, jint opt)
+{
+    ST_BT_LIGHT_REQ req;
+    ST_BT_LIGHT_RPT rpt;
+    int res;
+    jstring msg;
+    char *text = NULL;
+    cJSON *root,*entry;
+
+    req.fd = fd;
+    req.addr =addr;
+    req.opt = opt;
+
+    res = EV_bentoHot(&req,&rpt);
+    root=cJSON_CreateObject();
+    entry = cJSON_CreateObject();
+    cJSON_AddItemToObject(root, JSON_HEAD, entry);
+    cJSON_AddNumberToObject(entry,JSON_TYPE,EV_BENTO_HOT);
+
+    cJSON_AddNumberToObject(entry,"port_id",rpt.fd);
+    cJSON_AddNumberToObject(entry,"addr",rpt.addr);
+    cJSON_AddNumberToObject(entry,"opt",rpt.opt);
+
+    if(res == 1){
+        cJSON_AddNumberToObject(entry,"is_success",1);
+        cJSON_AddNumberToObject(entry,"result",rpt.res);
+    }
+    else{
+        cJSON_AddNumberToObject(entry,"is_success",0);
+        cJSON_AddNumberToObject(entry,"result",0);
+    }
+
+    text = cJSON_Print(root);
+    cJSON_Delete(root);
+    if(text != NULL){
+        msg = (*env)->NewStringUTF(env,text);
+        free(text);
+    }
+    else{
+        msg = (*env)->NewStringUTF(env,"{\"EV_json\":{\"EV_type\":9999}}");
+    }
+
+    return msg;
+
+
+}
+
 
 /*********************************************************************************************************
 ** Function name	:		trade
