@@ -81,7 +81,8 @@
  /cygdrive/d/VMCSource/android/VmcJNI/java_export/jni/../../db_api/mdb_api.h \
  /cygdrive/d/VMCSource/android/VmcJNI/java_export/jni/../../cpp_export/db_driver.h \
  /cygdrive/d/VMCSource/android/VmcJNI/java_export/jni/../../db_api/bento_api.h \
- /cygdrive/d/VMCSource/android/VmcJNI/java_export/jni/../../db_api/Column_api.h
+ /cygdrive/d/VMCSource/android/VmcJNI/java_export/jni/../../db_api/Column_api.h \
+ /cygdrive/d/VMCSource/android/VmcJNI/java_export/jni/../../db_api/lift_api.h
 
 /cygdrive/d/VMCSource/android/VmcJNI/java_export/jni/../../cpp_export/db_driver.h:
 
@@ -246,3 +247,5 @@
 /cygdrive/d/VMCSource/android/VmcJNI/java_export/jni/../../db_api/bento_api.h:
 
 /cygdrive/d/VMCSource/android/VmcJNI/java_export/jni/../../db_api/Column_api.h:
+
+/cygdrive/d/VMCSource/android/VmcJNI/java_export/jni/../../db_api/lift_api.h:
