@@ -212,7 +212,7 @@ uint8 LIFT_vmcVendingReq(uint8 bin,uint8 row,uint8 column)
 //0x1F 通信故障 0x10 正常 0x11 整机忙 0x12故障
 uint8 LIFT_vmcStatusReq(uint8 bin)
 {
-	uint8 res;
+	uint8 res,status;
 	ST_LIFT_MSG *msg = &liftMsg;
 	msg->addr = 0x40;
 	msg->bin = bin;
@@ -222,10 +222,14 @@ uint8 LIFT_vmcStatusReq(uint8 bin)
 	res =  LIFT_send(msg);
 	if(res == 1 && msg->recvbuf[I_MT] == GCC_STATUS_ACK){
 		//stLiftTable.Error_OVERALLUINT = msg->recvbuf[5];
-		if(msg->recvbuf[5] == 0x01){
+		status = msg->recvbuf[5];
+		if(status & 0x01){
 			return LIFT_STATUS_BUSY; //忙
 		}
-
+		if(status & 0x80){ //货没取走
+			return LIFT_VENDOUT_GOODS_NOT_TAKE;
+		}
+		
 		if(msg->recvbuf[6] == 0x00){
 			return LIFT_STATUS_NORMAL; //正常
 		}
@@ -402,9 +406,9 @@ uint8 LIFT_vmcChuchou(uint8 bin,uint8 flag)
 //返回0:失败，1：成功，2：数据错误 3：无货 4：卡货 5：取货门未开启 6：货物未取走 7：未定义错误	0xff：通信失败
 uint8 LIFT_vendoutReq(uint8 bin,uint8 row,uint8 column)
 {
-	uint8 res,res1,flow,err,tradeResult,vendoutOk;
+	uint8 res,res1,flow,err,tradeResult,vendoutOk,i;
 	int32 timeout;
-	timeout = 30;flow = 0;
+	timeout = 90;flow = 0;
 	while(timeout > 0){
 		res = LIFT_vmcStatusReq(bin);
 		if(res == LIFT_STATUS_NORMAL){
@@ -423,42 +427,36 @@ uint8 LIFT_vendoutReq(uint8 bin,uint8 row,uint8 column)
 	}
 
 
-	vendoutOk = 0;
-	tradeResult = LIFT_VENDOUT_FAIL;
-	timeout = 300 + row * 3;
-	while(timeout > 0){
-		if(vendoutOk == 0){
-			res = LIFT_vmcVendingReq(bin,row,column);
-			if(res != 1){
-				EV_msleep(50);
-				res1 = LIFT_vmcVedingResult(bin);
-				if(res1 == LIFT_VENDOUT_VENDING){
-					vendoutOk = 1;
-				}
-			}
-			else{
+	// 2 出货
+	for(i = 0;i < 3;i++){
+		EV_msleep(500);
+		res = LIFT_vmcVendingReq(bin,row,column);
+		if(res != 1){
+			EV_msleep(50);
+			res1 = LIFT_vmcVedingResult(bin);
+			if(res1 == LIFT_VENDOUT_VENDING){
 				vendoutOk = 1;
-			}
-
-			if(vendoutOk == 0){
-				EV_msleep(1000);
-				timeout--;
-				continue;
+				break;
 			}
 		}
-		
+		else{
+			vendoutOk = 1;
+			break;
+		}
+	}
+
+	if(vendoutOk != 1){
+		return LIFT_VENDOUT_COM_ERR;
+	}
+
+	// 3查询
+	vendoutOk = 0;
+	tradeResult = LIFT_VENDOUT_FAIL;
+	timeout = 240;
+	while(timeout > 0){
 		res = LIFT_vmcVedingResult(bin);//检测出货结果
 		if(res > 0 && res != LIFT_VENDOUT_VENDING){ //出货结果
-			if(res == LIFT_VENDOUT_GOODS_NOT_TAKE){
-				EV_msleep(1000);
-				timeout--;
-				tradeResult = LIFT_VENDOUT_GOODS_NOT_TAKE;
-				vendoutOk = 0;
-				continue;
-			}
-			else{
-				return res;
-			}
+			return res;
 		}
 		else{
 			EV_msleep(1000);

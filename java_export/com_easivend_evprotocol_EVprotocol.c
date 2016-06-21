@@ -322,8 +322,8 @@ JNIEXPORT jstring JNICALL Java_com_easivend_evprotocol_EVprotocol_EVBentoLight
 JNIEXPORT jstring JNICALL Java_com_easivend_evprotocol_EVprotocol_EVBentoCool
   (JNIEnv *env, jclass cls, jint fd, jint addr, jint opt)
 {
-    ST_BT_LIGHT_REQ req;
-    ST_BT_LIGHT_RPT rpt;
+    ST_BT_COOL_REQ req;
+    ST_BT_COOL_RPT rpt;
     int res;
     jstring msg;
     char *text = NULL;
@@ -375,8 +375,8 @@ JNIEXPORT jstring JNICALL Java_com_easivend_evprotocol_EVprotocol_EVBentoCool
 JNIEXPORT jstring JNICALL Java_com_easivend_evprotocol_EVprotocol_EVBentoHot
   (JNIEnv *env, jclass cls, jint fd, jint addr, jint opt)
 {
-    ST_BT_LIGHT_REQ req;
-    ST_BT_LIGHT_RPT rpt;
+    ST_BT_HOT_REQ req;
+    ST_BT_HOT_RPT rpt;
     int res;
     jstring msg;
     char *text = NULL;
