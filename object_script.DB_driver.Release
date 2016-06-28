@@ -1,0 +1,17 @@
+INPUT(
+./build\obj\win_yocserialport.o
+./build\obj\timer.o
+./build\obj\LOGC.o
+./build\obj\yoc_serialbase.o
+./build\obj\yoc_serialport.o
+./build\obj\ev_config.o
+./build\obj\db_driver.o
+./build\obj\db_serial.o
+./build\obj\mdb_api.o
+./build\obj\com_easivend_evprotocol_EVprotocol.o
+./build\obj\db_json.o
+./build\obj\bento_api.o
+./build\obj\cJSON.o
+./build\obj\column_api.o
+./build\obj\lift_api.o
+);
