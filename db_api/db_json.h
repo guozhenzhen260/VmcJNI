@@ -6,6 +6,7 @@
 
 #define JSON_HEAD		"EV_json"
 #define JSON_TYPE		"EV_type"
+#define JSON_VBOX       "EV_vbox"
 #if 0
 void Json_insert_str(cJSON *json,char *label,char *value);
 void Json_insert_int(cJSON *json,char *label,long value);

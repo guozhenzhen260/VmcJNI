@@ -44,6 +44,7 @@
 #define EV_MDB_B_CON        29      //MDB÷Ω±“∆˜≈‰÷√
 #define EV_MDB_C_CON        30      //MDB”≤±“∆˜≈‰÷√
 #define EV_MDB_HP_PAYOUT    31      //hopper”≤±“∆˜’“±“
+#define EV_VBOX_TYPE        911
 #define EV_CMD_FAIL         9998
 #define EV_JSON_ERR         9999
 

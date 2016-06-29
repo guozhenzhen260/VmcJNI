@@ -73,7 +73,9 @@ HEADERS += \
     db_api/bento_api.h \
     general/cJSON.h \
     db_api/column_api.h \
-    db_api/lift_api.h
+    db_api/lift_api.h \
+    db_api/vbox_api.h \
+    java_export/com_easivend_evprotocol_VboxProtocol.h
 
 SOURCES += \
     ytimer/timer.c \
@@ -89,7 +91,9 @@ SOURCES += \
     db_api/bento_api.c \
     general/cJSON.c \
     db_api/column_api.c \
-    db_api/lift_api.c
+    db_api/lift_api.c \
+    db_api/vbox_api.c \
+    java_export/com_easivend_evprotocol_VboxProtocol.c
 
 DISTFILES += \
     win32_api/EV_protocol.def
