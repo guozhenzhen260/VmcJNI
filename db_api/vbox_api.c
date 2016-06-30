@@ -116,7 +116,7 @@ static uint8 VBOX_recv(VBOX_MSG *msg,uint32 timeout)
                     msg->mt = msg->recvbuf[I_MT];
                     msg->sn = msg->recvbuf[I_SN];
                     msg->ver = msg->recvbuf[I_VER] & 0x07;
-                    msg->F7 = msg->recvbuf[I_VER] & 0x80 ? 1 : 0;
+                    msg->F7 = msg->recvbuf[I_VER] & (0x01 << 7) ? 1 : 0;
 					return 1;
 				}
 				else{
@@ -165,7 +165,9 @@ VBOX_MSG *VBOX_readMsg(int32 port,uint32 timeout)
 
     msg->port = port;
     msg->res = VBOX_recv(msg,timeout);
-    VBOX_LOG(2,msg->recvbuf,msg->recvlen);
+    if(msg->recvlen > 0){
+        VBOX_LOG(2,msg->recvbuf,msg->recvlen);
+    }
     return msg;
 }
 
