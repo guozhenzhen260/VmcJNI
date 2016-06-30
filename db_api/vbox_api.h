@@ -16,6 +16,9 @@
 #define VBOX_ACTION_RPT  0x0B
 #define VBOX_BUTTON_RPT  0x0C
 #define VBOX_STATUS_RPT  0x0D
+#define VBOX_REQUEST    0x09
+#define VBOX_ADMIN_RPT  0x0A
+#define VBOX_COST_RPT   0x10
 
 
 //PC-->VMC
@@ -74,6 +77,10 @@ typedef struct{
 
 VBOX_MSG *VBOX_readMsg(int32 port,uint32 timeout);
 int VBOX_sendMsg(int32 port,VBOX_MSG *msg);
+VBOX_MSG *VBOX_getMsg(void);
 int VBOX_sendAck(int32 port);
 int VBOX_getSetup(int32 port);
+int VBOX_getHuoDao(int32 port,int32 device);
+int VBOX_getInfo(int32 port,int32 type);
+int VBOX_vendoutInd(int32 port,int32 device,int32 method,int32 id,int32 type,int32 cost);
 #endif // VBOX_API_H

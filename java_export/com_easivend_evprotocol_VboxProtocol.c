@@ -29,6 +29,29 @@ static jstring JSON_stringfy(JNIEnv *env,cJSON *root,char *text)
     return msg;
 }
 
+
+static VBOX_MSG *JSON_vboxParse(JNIEnv *env,jstring msgjson)
+{
+    char *str;
+    VBOX_MSG *msg;
+    cJSON *root,*entry,*t1,*t2,*t3,*t4;
+
+    msg = VBOX_getMsg();
+    if(msg == NULL){
+        return NULL;
+    }
+
+//    str = (char *)(*env)->GetStringUTFChars(env,msgjson, NULL);
+//    root=cJSON_Parse((const char *)str);
+//    (*env)->ReleaseStringUTFChars(env,reqStr,str);
+
+
+
+    return msg;
+
+
+}
+
 /*
  * Class:     com_easivend_evprotocol_VboxProtocol
  * Method:    EV_portRegister
@@ -41,6 +64,7 @@ JNIEXPORT jstring JNICALL Java_com_easivend_evprotocol_VboxProtocol_VboxReadMsg
     char *text = NULL;
     cJSON *root,*entry;
     VBOX_MSG *vmsg;
+    unsigned char *buf,in,temp8,textbuf[32],i;
 
     vmsg = VBOX_readMsg(fd,(uint32)timeout);
     root=cJSON_CreateObject();
@@ -57,10 +81,166 @@ JNIEXPORT jstring JNICALL Java_com_easivend_evprotocol_VboxProtocol_VboxReadMsg
             cJSON_AddNumberToObject(entry,"mt",VBOX_TIMEOUT);
         }
         else if(vmsg->res == 1){
+
             cJSON_AddNumberToObject(entry,"mt",vmsg->mt);
             cJSON_AddNumberToObject(entry,"sn",vmsg->sn);
             cJSON_AddNumberToObject(entry,"ver",vmsg->ver);
             cJSON_AddNumberToObject(entry,"F7",vmsg->F7);
+            buf = (unsigned char *)vmsg->recvbuf;in = 5;
+            switch(vmsg->mt){
+                case VBOX_POLL:case VBOX_ACK_RPT:case VBOX_NAK_RPT:
+                    in = 5;
+                    break;
+                case VBOX_VMC_SETUP:
+                    cJSON_AddNumberToObject(entry,"hd_num",buf[in++]);
+                    cJSON_AddNumberToObject(entry,"pos_num",buf[in++]);
+                    cJSON_AddNumberToObject(entry,"magic1",INTEG16(buf[in+0],buf[in+1]));in+=2;
+                    cJSON_AddNumberToObject(entry,"scale_factor",buf[in++]);
+                    cJSON_AddNumberToObject(entry,"decimal_places",buf[in++]);
+                    cJSON_AddNumberToObject(entry,"feature",INTEG32(buf[in + 0],buf[in + 1],buf[in + 2],buf[in + 3])); in += 4;
+                    break;
+                case VBOX_PAYIN_RPT:
+                    cJSON_AddNumberToObject(entry,"dt",buf[in++]);
+                    cJSON_AddNumberToObject(entry,"value",INTEG16(buf[in+0],buf[in+1]));in+=2;
+                    cJSON_AddNumberToObject(entry,"total_value",INTEG16(buf[in+0],buf[in+1]));in+=2;
+                    break;
+                case VBOX_PAYOUT_RPT:
+                    cJSON_AddNumberToObject(entry,"device",buf[in++]);
+                    cJSON_AddNumberToObject(entry,"value",INTEG16(buf[in+0],buf[in+1]));in+=2;
+                    cJSON_AddNumberToObject(entry,"total_value",INTEG16(buf[in+0],buf[in+1]));in+=2;
+                    cJSON_AddNumberToObject(entry,"type",buf[in++]);
+                    break;
+                case VBOX_VENDOUT_RPT:
+                    cJSON_AddNumberToObject(entry,"device",buf[in++]);
+                    cJSON_AddNumberToObject(entry,"status",buf[in++]);
+                    cJSON_AddNumberToObject(entry,"hd_id",buf[in++]);
+                    cJSON_AddNumberToObject(entry,"type",buf[in++]);
+                    cJSON_AddNumberToObject(entry,"cost",INTEG16(buf[in+0],buf[in+1]));in+=2;
+                    cJSON_AddNumberToObject(entry,"total_value",INTEG16(buf[in+0],buf[in+1]));in+=2;
+                    cJSON_AddNumberToObject(entry,"huodao",buf[in++]);
+                    break;
+                case VBOX_REQUEST:
+                    in = 5;
+                    break;
+                case VBOX_ADMIN_RPT:
+                    temp8 = buf[in++];
+                    cJSON_AddNumberToObject(entry,"type",temp8);
+                    if(temp8 == 2){
+                        cJSON_AddNumberToObject(entry,"data1",buf[in++]);
+                        cJSON_AddNumberToObject(entry,"data2",buf[in++]);
+                    }
+                    break;
+                case VBOX_ACTION_RPT:
+                    temp8 = buf[in++];
+                    cJSON_AddNumberToObject(entry,"action",temp8);
+                    if(temp8 == 1){
+                        cJSON_AddNumberToObject(entry,"seconds",buf[in++]);
+                        cJSON_AddNumberToObject(entry,"hd_id",buf[in++]);
+                        cJSON_AddNumberToObject(entry,"type",buf[in++]);
+                        cJSON_AddNumberToObject(entry,"cost",INTEG16(buf[in+0],buf[in+1]));in+=2;
+                        cJSON_AddNumberToObject(entry,"total_value",INTEG16(buf[in+0],buf[in+1]));in+=2;
+                    }
+                    else if(temp8 == 2){
+                        cJSON_AddNumberToObject(entry,"seconds",buf[in++]);
+                        cJSON_AddNumberToObject(entry,"value",INTEG16(buf[in+0],buf[in+1]));in+=2;
+                        cJSON_AddNumberToObject(entry,"total_value",INTEG16(buf[in+0],buf[in+1]));in+=2;
+                        cJSON_AddNumberToObject(entry,"type",buf[in++]);
+                    }
+                    else if(temp8 == 5){
+                       cJSON_AddNumberToObject(entry,"value",buf[in++]);
+                    }
+                    break;
+                 case VBOX_BUTTON_RPT:
+                    temp8 = buf[in++];
+                    cJSON_AddNumberToObject(entry,"type",temp8);
+                    if(temp8 == 0 || temp8 == 4){
+                        cJSON_AddNumberToObject(entry,"value",buf[in++]);
+                    }
+                    else if(temp8 == 1 || temp8 == 2){
+                        cJSON_AddNumberToObject(entry,"device",buf[in++]);
+                        cJSON_AddNumberToObject(entry,"value",buf[in++]);
+                    }
+                    break;
+                  case VBOX_STATUS_RPT:
+                    temp8 = buf[in++];
+                    cJSON_AddNumberToObject(entry,"check_st",(temp8 >> 6) & 0x03);
+                    cJSON_AddNumberToObject(entry,"bv_st",(temp8 >> 4) & 0x03);
+                    cJSON_AddNumberToObject(entry,"cc_st",(temp8 >> 2) & 0x03);
+                    cJSON_AddNumberToObject(entry,"vmc_st",(temp8 >> 0) & 0x03);
+                    cJSON_AddNumberToObject(entry,"post_st",buf[in++]);
+                    cJSON_AddNumberToObject(entry,"change",INTEG16(buf[in+0],buf[in+1]));in+=2;
+                    cJSON_AddNumberToObject(entry,"tem1",buf[in++]);
+                    cJSON_AddNumberToObject(entry,"tem2",buf[in++]);
+                    cJSON_AddNumberToObject(entry,"tem3",buf[in++]);
+                    cJSON_AddNumberToObject(entry,"tem4",buf[in++]);
+                    cJSON_AddNumberToObject(entry,"tem_st",buf[in++]);
+                    cJSON_AddNumberToObject(entry,"auto_payout",buf[in++]);
+                    break;
+                case VBOX_HUODAO_RPT:
+                    cJSON_AddNumberToObject(entry,"device",buf[in++]);
+                    temp8 = 5 + 1 + 2;
+                    temp8 = vmsg->recvlen > temp8 ?vmsg->recvlen - temp8: 0;
+                    for(i = 0;i < temp8;i++){
+                        memset((void *)textbuf,0,sizeof(textbuf));
+                        sprintf((char *)textbuf,"huodao%d",i + 1);
+                        cJSON_AddNumberToObject(entry,(const char *)textbuf,buf[in++]);
+                    }
+                    break;
+                case VBOX_COST_RPT:
+                    cJSON_AddNumberToObject(entry,"device",buf[in++]);
+                    cJSON_AddNumberToObject(entry,"value",INTEG16(buf[in+0],buf[in+1]));in+=2;
+                    cJSON_AddNumberToObject(entry,"total_value",INTEG16(buf[in+0],buf[in+1]));in+=2;
+                    cJSON_AddNumberToObject(entry,"type",buf[in++]);
+                    break;
+                case VBOX_INFO_RPT:
+                    temp8 = buf[in++];
+                    cJSON_AddNumberToObject(entry,"type",temp8);
+                    if(temp8 == 3){
+                        cJSON_AddNumberToObject(entry,"total_value",INTEG16(buf[in+0],buf[in+1]));in+=2;
+                    }
+                    else if(temp8 == 4){
+                        temp8 = 0;
+                    }
+                    else if(temp8 == 5){
+                        cJSON_AddNumberToObject(entry,"year",INTEG16(buf[in+0],buf[in+1]));in+=2;
+                        cJSON_AddNumberToObject(entry,"month",buf[in++]);
+                        cJSON_AddNumberToObject(entry,"day",buf[in++]);
+                        cJSON_AddNumberToObject(entry,"hour",buf[in++]);
+                        cJSON_AddNumberToObject(entry,"min",buf[in++]);
+                        cJSON_AddNumberToObject(entry,"sec",buf[in++]);
+                        cJSON_AddNumberToObject(entry,"xq",buf[in++]);
+                    }
+                    else if(temp8 == 6){
+                        temp8 = 0;
+                    }
+                    else if(temp8 == 10){
+                        temp8 = 0;
+                        cJSON_AddNumberToObject(entry,"device",buf[in++]);
+                        temp8 = 5 + 1 + 1 + 2;
+                        temp8 = vmsg->recvlen > temp8 ?vmsg->recvlen - temp8: 0;
+                        for(i = 0;i < temp8;i++){
+                            memset((void *)textbuf,0,sizeof(textbuf));
+                            sprintf((char *)textbuf,"sp_id%d",i + 1);
+                            cJSON_AddNumberToObject(entry,(const char *)textbuf,buf[in++]);
+                        }
+                    }
+                    else if(temp8 == 12){
+                        temp8 = 0;
+                        cJSON_AddNumberToObject(entry,"device",buf[in++]);
+                        temp8 = 5 + 1 + 1 + 2;
+                        temp8 = vmsg->recvlen > temp8 ?vmsg->recvlen - temp8: 0;
+                        for(i = 0;i < temp8;i++){
+                            memset((void *)textbuf,0,sizeof(textbuf));
+                            sprintf((char *)textbuf,"price_id%d",i + 1);
+                            cJSON_AddNumberToObject(entry,(const char *)textbuf,buf[in++]);
+                        }
+                    }
+                    else{
+                        temp8 = 0;
+                    }
+                    break;
+                default:break;
+            }
         }
         else{
             cJSON_AddNumberToObject(entry,"mt",VBOX_DATA_ERROR);
@@ -100,6 +280,85 @@ JNIEXPORT jstring JNICALL Java_com_easivend_evprotocol_VboxProtocol_VboxGetSetup
     int res;
     res = VBOX_getSetup(fd);
     root=   cJSON_CreateObject();
+    entry = cJSON_CreateObject();
+    cJSON_AddItemToObject(root, JSON_HEAD,entry);
+    cJSON_AddNumberToObject(entry,JSON_TYPE,VBOX_TYPE);
+    cJSON_AddNumberToObject(entry,"send_result",res);
+    msg = JSON_stringfy(env,root,text);
+    return msg;
+}
+
+
+JNIEXPORT jstring JNICALL Java_com_easivend_evprotocol_VboxProtocol_VboxGetHuoDao
+  (JNIEnv *env, jclass cls, jint fd,jint device)
+{
+    jstring msg;
+    char *text = NULL;
+    cJSON *root,*entry;
+    int res;
+    res = VBOX_getHuoDao(fd,device);
+    root=   cJSON_CreateObject();
+    entry = cJSON_CreateObject();
+    cJSON_AddItemToObject(root, JSON_HEAD,entry);
+    cJSON_AddNumberToObject(entry,JSON_TYPE,VBOX_TYPE);
+    cJSON_AddNumberToObject(entry,"send_result",res);
+    msg = JSON_stringfy(env,root,text);
+    return msg;
+}
+
+JNIEXPORT jstring JNICALL Java_com_easivend_evprotocol_VboxProtocol_VboxGetInfo
+  (JNIEnv *env, jclass cls, jint fd,jint type)
+{
+    jstring msg;
+    char *text = NULL;
+    cJSON *root,*entry;
+    int res;
+    res = VBOX_getInfo(fd,type);
+    root=   cJSON_CreateObject();
+    entry = cJSON_CreateObject();
+    cJSON_AddItemToObject(root, JSON_HEAD,entry);
+    cJSON_AddNumberToObject(entry,JSON_TYPE,VBOX_TYPE);
+    cJSON_AddNumberToObject(entry,"send_result",res);
+    msg = JSON_stringfy(env,root,text);
+    return msg;
+}
+
+
+JNIEXPORT jstring JNICALL Java_com_easivend_evprotocol_VboxProtocol_VboxVendoutInd
+  (JNIEnv *env, jclass cls, jint fd,jint device,jint method,jint id,jint type,jint cost)
+{
+    jstring msg;
+    char *text = NULL;
+    cJSON *root,*entry;
+    int res;
+    res = VBOX_vendoutInd(fd,device,method,id,type,cost);
+    root=   cJSON_CreateObject();
+    entry = cJSON_CreateObject();
+    cJSON_AddItemToObject(root, JSON_HEAD,entry);
+    cJSON_AddNumberToObject(entry,JSON_TYPE,VBOX_TYPE);
+    cJSON_AddNumberToObject(entry,"send_result",res);
+    msg = JSON_stringfy(env,root,text);
+    return msg;
+}
+
+
+
+JNIEXPORT jstring JNICALL Java_com_easivend_evprotocol_VboxProtocol_VboxSendMsg
+  (JNIEnv *env, jclass cls,jstring msgjson)
+{
+    jstring msg;
+    char *text = NULL;
+    cJSON *root,*entry;
+    int res = -1;
+
+    VBOX_MSG *vboxMsg = JSON_vboxParse(env,msgjson);
+    if(vboxMsg == NULL){
+        res = -1;
+    }
+    else{
+        res = VBOX_sendMsg(0,vboxMsg);
+    }
+    root =  cJSON_CreateObject();
     entry = cJSON_CreateObject();
     cJSON_AddItemToObject(root, JSON_HEAD,entry);
     cJSON_AddNumberToObject(entry,JSON_TYPE,VBOX_TYPE);

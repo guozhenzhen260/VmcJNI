@@ -159,6 +159,11 @@ static uint8 VBOX_send(VBOX_MSG *msg)
 }
 
 
+VBOX_MSG *VBOX_getMsg(void)
+{
+    return &vboxMsg;
+}
+
 
 VBOX_MSG *VBOX_readMsg(int32 port,uint32 timeout)
 {
@@ -203,12 +208,49 @@ int VBOX_getSetup(int32 port)
 
 
 
-int VBOX_getSetup1(int32 port)
+int VBOX_getHuoDao(int32 port,int32 device)
 {
+    unsigned char in;
     VBOX_MSG *msg = &vboxMsg;
-    msg->mt = VBOX_GET_SETUP;
+    in = 0;
+    msg->mt = VBOX_GET_HUODAO;
     msg->F7 = 0;
-    msg->datalen = 0;
+    msg->datalen = 1;
+    msg->data[in++] = (uint8)device;
+    return VBOX_sendMsg(port,msg);
+}
+
+
+
+int VBOX_getInfo(int32 port,int32 type)
+{
+    unsigned char in;
+    VBOX_MSG *msg = &vboxMsg;
+    in = 0;
+    msg->mt = VBOX_GET_INFO;
+    msg->F7 = 0;
+    msg->datalen = 1;
+    msg->data[in++] = (uint8)type;
+    return VBOX_sendMsg(port,msg);
+}
+
+
+int VBOX_vendoutInd(int32 port,int32 device,int32 method,int32 id,int32 type,int32 cost)
+{
+    unsigned char in;
+    VBOX_MSG *msg = &vboxMsg;
+    in = 0;
+    msg->mt = VBOX_VENDOUT_IND;
+    msg->F7 = 0;
+
+    msg->data[in++] = (uint8)device;
+    msg->data[in++] = (uint8)method;
+    msg->data[in++] = (uint8)id;
+    msg->data[in++] = (uint8)type;
+    msg->data[in++] = HUINT16(cost);
+    msg->data[in++] = LUINT16(cost);
+
+    msg->datalen = in;
     return VBOX_sendMsg(port,msg);
 }
 
