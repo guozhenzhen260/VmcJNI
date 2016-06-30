@@ -91,4 +91,22 @@ JNIEXPORT jstring JNICALL Java_com_easivend_evprotocol_VboxProtocol_VboxSendAck
 }
 
 
+JNIEXPORT jstring JNICALL Java_com_easivend_evprotocol_VboxProtocol_VboxGetSetup
+  (JNIEnv *env, jclass cls, jint fd)
+{
+    jstring msg;
+    char *text = NULL;
+    cJSON *root,*entry;
+    int res;
+    res = VBOX_getSetup(fd);
+    root=   cJSON_CreateObject();
+    entry = cJSON_CreateObject();
+    cJSON_AddItemToObject(root, JSON_HEAD,entry);
+    cJSON_AddNumberToObject(entry,JSON_TYPE,VBOX_TYPE);
+    cJSON_AddNumberToObject(entry,"send_result",res);
+    msg = JSON_stringfy(env,root,text);
+    return msg;
+}
+
+
 

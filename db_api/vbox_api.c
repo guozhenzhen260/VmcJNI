@@ -98,6 +98,7 @@ static uint8 VBOX_recv(VBOX_MSG *msg,uint32 timeout)
 		if(index == 0){
             if(ch == HEAD_SF){
 				recvbuf[index++] = ch;
+                timeout += 200;
 			}
 			else{
 				index = 0;

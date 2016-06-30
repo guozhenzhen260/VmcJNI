@@ -75,4 +75,5 @@ typedef struct{
 VBOX_MSG *VBOX_readMsg(int32 port,uint32 timeout);
 int VBOX_sendMsg(int32 port,VBOX_MSG *msg);
 int VBOX_sendAck(int32 port);
+int VBOX_getSetup(int32 port);
 #endif // VBOX_API_H
