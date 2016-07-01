@@ -15,5 +15,6 @@ cJSON * Json_insert_head(cJSON *entry);
 
 #endif
 void Json_create_title(int type);
-
+int JSON_getInt(cJSON *node,const char *text);
+char *JSON_getString(cJSON *node,const char *text);
 #endif // DB_JSON_H

@@ -8,6 +8,35 @@ void Json_create_title(int type)
     type = type;
 
 }
+
+
+int JSON_getInt(cJSON *node,const char *text)
+{
+    cJSON *n;
+    if(node == NULL || text == NULL){
+        return -1;
+    }
+    n = cJSON_GetObjectItem(node,text);
+    if(n == NULL || n->type != cJSON_Number){
+        return -1;
+    }
+    return n->valueint;
+}
+
+char *JSON_getString(cJSON *node,const char *text)
+{
+    cJSON *n;
+    if(node == NULL || text == NULL){
+        return NULL;
+    }
+    n = cJSON_GetObjectItem(node,text);
+    if(n == NULL || n->type != cJSON_String){
+        return NULL;
+    }
+    return n->valuestring;
+}
+
+
 #if 0
 json_t * Json_insert_head(json_t *entry)
 {

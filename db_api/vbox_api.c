@@ -260,6 +260,116 @@ int VBOX_resetInd(int32 port,int32 dt)
 }
 
 
+int VBOX_controlInd(int32 port,int32 type,int32 value)
+{
+    unsigned char in;
+    VBOX_MSG *msg = &vboxMsg;
+    in = 0;
+    msg->mt = VBOX_CONTROL_IND;
+    msg->F7 = 1;
+    msg->data[in++] = type & 0xFF;
+    msg->data[in++] = value & 0xFF;
+    msg->datalen = in;
+    return VBOX_sendMsg(port,msg);
+}
+
+
+int VBOX_huodaoInd(int32 port,uint8 device,uint8 *buf,uint8 len)
+{
+    unsigned char in,i;
+    VBOX_MSG *msg = &vboxMsg;
+    in = 0;
+    msg->mt = VBOX_HUODAO_IND;
+    msg->F7 = 1;
+    msg->data[in++] = device & 0xFF;
+    for(i = 0;i < len;i++){
+        msg->data[in++] = buf[i];
+    }
+    msg->datalen = in;
+    return VBOX_sendMsg(port,msg);
+}
+
+
+int VBOX_positionInd(int32 port,uint8 device,uint8 *buf,uint8 len)
+{
+    unsigned char in,i;
+    VBOX_MSG *msg = &vboxMsg;
+    in = 0;
+    msg->mt = VBOX_POSITION_IND;
+    msg->F7 = 1;
+    msg->data[in++] = device & 0xFF;
+    for(i = 0;i < len;i++){
+        msg->data[in++] = buf[i];
+    }
+    msg->datalen = in;
+    return VBOX_sendMsg(port,msg);
+}
+
+
+int VBOX_payoutInd(int32 port,uint8 device,uint16 value,uint8 type)
+{
+    unsigned char in;
+    VBOX_MSG *msg = &vboxMsg;
+    in = 0;
+    msg->mt = VBOX_PAYOUT_IND;
+    msg->F7 = 1;
+    msg->data[in++] = device & 0xFF;
+    msg->data[in++] = HUINT16(value);
+    msg->data[in++] = LUINT16(value);
+    msg->data[in++] = type;
+    msg->datalen = in;
+    return VBOX_sendMsg(port,msg);
+}
+
+
+int VBOX_costInd(int32 port,uint8 device,uint16 value,uint8 type)
+{
+    unsigned char in;
+    VBOX_MSG *msg = &vboxMsg;
+    in = 0;
+    msg->mt = VBOX_COST_IND;
+    msg->F7 = 1;
+    msg->data[in++] = device & 0xFF;
+    msg->data[in++] = HUINT16(value);
+    msg->data[in++] = LUINT16(value);
+    msg->data[in++] = type;
+    msg->datalen = in;
+    return VBOX_sendMsg(port,msg);
+}
+
+
+int VBOX_salePriceInd(int32 port,uint8 device,uint16 *buf,uint8 len)
+{
+    unsigned char in,i;
+    VBOX_MSG *msg = &vboxMsg;
+    in = 0;
+    msg->mt = VBOX_SALEPRICE_IND;
+    msg->F7 = 1;
+    msg->data[in++] = device & 0xFF;
+    for(i = 0;i < len;i++){
+        msg->data[in++] = HUINT16(buf[i]);
+        msg->data[in++] = LUINT16(buf[i]);
+    }
+    msg->datalen = in;
+    return VBOX_sendMsg(port,msg);
+}
+
+int VBOX_huodaoSetInd(int32 port,uint8 device,uint8 *buf,uint8 len)
+{
+    unsigned char in,i;
+    VBOX_MSG *msg = &vboxMsg;
+    in = 0;
+    msg->mt = VBOX_HUODAO_SET_IND;
+    msg->F7 = 1;
+    msg->data[in++] = device & 0xFF;
+    for(i = 0;i < len;i++){
+        msg->data[in++] = buf[i];
+    }
+    msg->datalen = in;
+    return VBOX_sendMsg(port,msg);
+}
+
+
 int VBOX_vendoutInd(int32 port,int32 device,int32 method,int32 id,int32 type,int32 cost)
 {
     unsigned char in;
@@ -267,7 +377,6 @@ int VBOX_vendoutInd(int32 port,int32 device,int32 method,int32 id,int32 type,int
     in = 0;
     msg->mt = VBOX_VENDOUT_IND;
     msg->F7 = 1;
-
     msg->data[in++] = (uint8)device;
     msg->data[in++] = (uint8)method;
     msg->data[in++] = (uint8)id;
@@ -278,334 +387,3 @@ int VBOX_vendoutInd(int32 port,int32 device,int32 method,int32 id,int32 type,int
     msg->datalen = in;
     return VBOX_sendMsg(port,msg);
 }
-
-
-
-
-#if 0
-
-//出货指令
-uint8 LIFT_vmcVendingReq(uint8 bin,uint8 row,uint8 column)
-{
-	uint8 res;
-	ST_LIFT_MSG *msg = &liftMsg;
-	msg->addr = 0x40;
-	msg->bin = bin;
-	msg->cmd = VMC_VENDING_REQ;
-	msg->data[0] = row;
-	msg->data[1] = column;
-	msg->datalen = 2;
-	res = LIFT_send(msg);
-	if(res == 1){
-		return  msg->recvbuf[I_MT] == GCC_VENDING_ACK ?  1 : 2;
-	}
-	else{ 
-		return res;
-	}
-}
-
-//0x1F 通信故障 0x10 正常 0x11 整机忙 0x12故障
-uint8 LIFT_vmcStatusReq(uint8 bin)
-{
-	uint8 res,status;
-	ST_LIFT_MSG *msg = &liftMsg;
-	msg->addr = 0x40;
-	msg->bin = bin;
-	msg->cmd = VMC_STATUS_REQ;
-	msg->datalen = 0;
-	
-	res =  LIFT_send(msg);
-	if(res == 1 && msg->recvbuf[I_MT] == GCC_STATUS_ACK){
-		//stLiftTable.Error_OVERALLUINT = msg->recvbuf[5];
-		status = msg->recvbuf[5];
-		if(status & 0x01){
-			return LIFT_STATUS_BUSY; //忙
-		}
-		if(status & 0x80){ //货没取走
-			return LIFT_VENDOUT_GOODS_NOT_TAKE;
-		}
-		
-		if(msg->recvbuf[6] == 0x00){
-			return LIFT_STATUS_NORMAL; //正常
-		}
-		else{
-			return LIFT_STATUS_FAULT; //故障
-		}
-	}
-	else{
-		return LIFT_STATUS_COM_ERR; //通信故障
-	}
-}
-
-
-
-
-
-
-
-uint8 LIFT_vmcReset(uint8 bin)
-{
-	uint8 res;
-	ST_LIFT_MSG *msg = &liftMsg;
-	msg->addr = 0x40;
-	msg->bin = bin;
-	msg->cmd = VMC_RESET_REQ;
-	msg->datalen = 0;
-	
-	res =  LIFT_send(msg);
-	if(res == 1 && msg->recvbuf[I_MT] == GCC_RESET_ACK){
-		return 1;
-	}
-	else{
-		return 0;
-	}
-}
-
-
-
-
-//返回0:失败，1：成功，2：数据错误 3：无货 4：卡货 5：取货门未开启 6：货物未取走 7：未定义错误	0xff：通信失败
-// 0 未接受 1成功 0x88正在出货
-uint8 LIFT_vmcVedingResult(uint8 bin)
-{
-	uint8 res,temp;
-	ST_LIFT_MSG *msg = &liftMsg;
-	msg->addr = 0x40;
-	msg->bin = bin;
-	msg->cmd = VMC_VENDINGRESULT_REQ;
-	msg->datalen = 0;
-	
-	res =  LIFT_send(msg);
-	if(res == 1 && msg->recvbuf[I_MT] == GCC_VENDINGRESULT_ACK){
-		if(msg->recvbuf[I_DATA] != 0x00){
-			return LIFT_VENDOUT_VENDING;
-		}
-		if(msg->recvbuf[I_DATA + 1] == 0x00){
-			return LIFT_VENDOUT_SUC;
-		}
-
-		temp = msg->recvbuf[I_DATA + 2];
-		if(temp == 0x00){
-			return LIFT_VENDOUT_SUC;
-		}
-		else if(temp == 0x01){
-			return LIFT_VENDOUT_DATAERR;
-		}
-		else if(temp == 0x02){
-			return LIFT_VENDOUT_EMPTY;
-		}
-		else if(temp == 0x03){
-			return LIFT_VENDOUT_STUCK;
-		}
-		else if(temp == 0x04){
-			return LIFT_VNEDOUT_DOOR_NOT_OPEN;
-		}
-		else if(temp == 0x05){
-			return LIFT_VENDOUT_GOODS_NOT_TAKE;
-		}
-		else if(temp == 0x06){
-			return LIFT_VENDOUT_OTHER_FAULT;
-		}
-		else if(temp == 0x07){
-			return LIFT_VENDOUT_OTHER_FAULT;
-		}
-		else{
-			return LIFT_VENDOUT_OTHER_FAULT;
-		}
-	}
-	else{
-		return 0;
-	}
-}
-
-
-uint8 LIFT_vmcVendingResultByTime(uint8 bin,unsigned int ms)
-{
-	uint8 res;
-	while(ms > 0){
-		res = LIFT_vmcVedingResult(bin);
-		if(res > 0){
-			return res;
-		}
-		else{
-			EV_msleep(1000);
-			ms--;
-		}
-	}
-	return 0;
-}
-
-
-uint8 LIFT_vmcOpenLight(uint8 bin)
-{
-	uint8 res;
-	ST_LIFT_MSG *msg = &liftMsg;
-	msg->addr = 0x40;
-	msg->bin = bin;
-	msg->cmd = VMC_OPENLIGHT_REQ;
-	msg->datalen = 0;
-	
-	res =  LIFT_send(msg);
-	if(res == 1 && msg->recvbuf[I_MT] == GCC_OPENLIGHT_ACK){
-		return 1;
-	}
-	else{
-		return 0;
-	}
-
-
-}
-
-uint8 LIFT_vmcCloseLight(uint8 bin)
-{
-	uint8 res;
-	ST_LIFT_MSG *msg = &liftMsg;
-	msg->addr = 0x40;
-	msg->bin = bin;
-	msg->cmd = VMC_CLOSELIGHT_REQ;
-	msg->datalen = 0;
-	
-	res =  LIFT_send(msg);
-	if(res == 1 && msg->recvbuf[I_MT] == GCC_CLOSELIGHT_ACK){
-		return 1;
-	}
-	else{
-		return 0;
-	}
-}
-
-
-uint8 LIFT_vmcChuchou(uint8 bin,uint8 flag)
-{
-	uint8 res;
-	ST_LIFT_MSG *msg = &liftMsg;
-	msg->addr = 0x40;
-	msg->bin = bin;
-	msg->cmd = VMC_CHUCHOU_REQ;
-	msg->data[0] = flag;
-	msg->datalen = 1;
-	
-	res =  LIFT_send(msg);
-	if(res == 1 && msg->recvbuf[I_MT] == GCC_CHUCHOU_ACK){
-		return 1;
-	}
-	else{
-		return 0;
-	}
-}
-
-
-
-
-
-//返回0:失败，1：成功，2：数据错误 3：无货 4：卡货 5：取货门未开启 6：货物未取走 7：未定义错误	0xff：通信失败
-uint8 LIFT_vendoutReq(uint8 bin,uint8 row,uint8 column)
-{
-	uint8 res,res1,flow,err,tradeResult,vendoutOk,i;
-	int32 timeout;
-	timeout = 90;flow = 0;
-	while(timeout > 0){
-		res = LIFT_vmcStatusReq(bin);
-		if(res == LIFT_STATUS_NORMAL){
-			flow = 1;
-			break;
-		}
-		else{
-			if(res != LIFT_STATUS_COM_ERR){
-				EV_msleep(1000);
-				timeout--;
-			}			
-		}
-	}
-	if(flow == 0){ //有问题
-		return res;
-	}
-
-
-	// 2 出货
-	for(i = 0;i < 3;i++){
-		EV_msleep(500);
-		res = LIFT_vmcVendingReq(bin,row,column);
-		if(res != 1){
-			EV_msleep(50);
-			res1 = LIFT_vmcVedingResult(bin);
-			if(res1 == LIFT_VENDOUT_VENDING){
-				vendoutOk = 1;
-				break;
-			}
-		}
-		else{
-			vendoutOk = 1;
-			break;
-		}
-	}
-
-	if(vendoutOk != 1){
-		return LIFT_VENDOUT_COM_ERR;
-	}
-
-	// 3查询
-	vendoutOk = 0;
-	tradeResult = LIFT_VENDOUT_FAIL;
-	timeout = 240;
-	while(timeout > 0){
-		res = LIFT_vmcVedingResult(bin);//检测出货结果
-		if(res > 0 && res != LIFT_VENDOUT_VENDING){ //出货结果
-			return res;
-		}
-		else{
-			EV_msleep(1000);
-			timeout--;
-		}
-	}
-
-	return tradeResult;
-}
-
-
-
-
-
-uint8 LIFT_vendout(ST_COL_OPEN_REQ *req,ST_COL_OPEN_RPT *rpt)
-{
-	int32 ret;
-	ST_LIFT_MSG *msg = &liftMsg;
-	uint8 row,col;
-    if(req == NULL || rpt == NULL){
-        EV_LOGE("LIFT_vendout:s=%x,r=%x",(unsigned int)req,(unsigned int)rpt);
-        return 0;
-    }
-
-    if(req->addr <= 0){
-        EV_LOGE("LIFT_vendout:req->addr = %d",req->addr);
-        return 0;
-    }
-
-    if(req->no <= 0){
-        EV_LOGE("LIFT_vendout:req->no = %d",req->no);
-        return 0;
-    }
-
-    memset((void *)rpt,0,sizeof(ST_COL_OPEN_RPT));
-    rpt->addr = req->addr;
-    rpt->fd = req->fd;
-    rpt->no = req->no;
-
-    msg->port  = rpt->fd;
-    msg->addr = rpt->addr;
-	msg->bin = rpt->addr;
-
-	row = rpt->no / 10;
-	col = rpt->no % 10;
-	ret = LIFT_vendoutReq(msg->bin,row,col);
-	
-   	rpt->is_success = 1;
-    rpt->result = ret;
-
-	return 1;
-
-}
-#endif
-
-
-

@@ -28,6 +28,7 @@
 #define VBOX_GET_SETUP      0x90
 #define VBOX_GET_HUODAO     0x8A
 #define VBOX_HUODAO_IND     0x87
+#define VBOX_POSITION_IND   0x88
 #define VBOX_SALEPRICE_IND  0x8E
 #define VBOX_HUODAO_SET_IND 0x8F
 #define VBOX_PRICE_SET_IND  0x8E
@@ -38,6 +39,7 @@
 #define VBOX_SET_HUODAO     0x93
 #define VBOX_GET_STATUS     0x86
 #define VBOX_PAYOUT_IND     0x89
+#define VBOX_COST_IND       0x8B
 
 
 #define VBOX_TIMEOUT        0xFE
@@ -75,6 +77,22 @@ typedef struct{
 
 
 
+typedef struct{
+    uint8 port;
+    uint8 device;
+    uint8 id[100];
+    uint8 id_len;
+}VBOX_JSON_SP_ID;
+
+
+typedef struct{
+    uint8 port;
+    uint8 device;
+    uint16 price[100];
+    uint8 price_len;
+}VBOX_JSON_SP_PRICE;
+
+
 
 VBOX_MSG *VBOX_readMsg(int32 port,uint32 timeout);
 int VBOX_sendMsg(int32 port,VBOX_MSG *msg);
@@ -85,5 +103,12 @@ int VBOX_getHuoDao(int32 port,int32 device);
 int VBOX_getStatus(int32 port);
 int VBOX_getInfo(int32 port,int32 type);
 int VBOX_resetInd(int32 port,int32 dt);
+int VBOX_controlInd(int32 port,int32 type,int32 value);
+int VBOX_huodaoInd(int32 port,uint8 device,uint8 *buf,uint8 len);
+int VBOX_positionInd(int32 port,uint8 device,uint8 *buf,uint8 len);
 int VBOX_vendoutInd(int32 port,int32 device,int32 method,int32 id,int32 type,int32 cost);
+int VBOX_payoutInd(int32 port,uint8 device,uint16 value,uint8 type);
+int VBOX_costInd(int32 port,uint8 device,uint16 value,uint8 type);
+int VBOX_salePriceInd(int32 port,uint8 device,uint16 *buf,uint8 len);
+int VBOX_huodaoSetInd(int32 port,uint8 device,uint8 *buf,uint8 len);
 #endif // VBOX_API_H
