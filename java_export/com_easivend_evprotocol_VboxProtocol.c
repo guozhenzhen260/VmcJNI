@@ -29,6 +29,20 @@ static jstring JSON_stringfy(JNIEnv *env,cJSON *root,char *text)
     return msg;
 }
 
+static jstring JSON_serialSendRpt(JNIEnv *env,int res)
+{
+    jstring msg;
+    char *text = NULL;
+    cJSON *root,*entry;
+    root=   cJSON_CreateObject();
+    entry = cJSON_CreateObject();
+    cJSON_AddItemToObject(root, JSON_HEAD,entry);
+    cJSON_AddNumberToObject(entry,JSON_TYPE,VBOX_TYPE);
+    cJSON_AddNumberToObject(entry,"send_result",res);
+    msg = JSON_stringfy(env,root,text);
+    return msg;
+}
+
 
 static VBOX_MSG *JSON_vboxParse(JNIEnv *env,jstring msgjson)
 {
@@ -229,10 +243,10 @@ JNIEXPORT jstring JNICALL Java_com_easivend_evprotocol_VboxProtocol_VboxReadMsg
                         cJSON_AddNumberToObject(entry,"device",buf[in++]);
                         temp8 = 5 + 1 + 1 + 2;
                         temp8 = vmsg->recvlen > temp8 ?vmsg->recvlen - temp8: 0;
-                        for(i = 0;i < temp8;i++){
+                        for(i = 0;i < (temp8 / 2);i++){
                             memset((void *)textbuf,0,sizeof(textbuf));
                             sprintf((char *)textbuf,"price_id%d",i + 1);
-                            cJSON_AddNumberToObject(entry,(const char *)textbuf,buf[in++]);
+                            cJSON_AddNumberToObject(entry,(const char *)textbuf,INTEG16(buf[in + 0],buf[in + 1]));in += 2;
                         }
                     }
                     else{
@@ -306,6 +320,25 @@ JNIEXPORT jstring JNICALL Java_com_easivend_evprotocol_VboxProtocol_VboxGetHuoDa
     return msg;
 }
 
+
+
+JNIEXPORT jstring JNICALL Java_com_easivend_evprotocol_VboxProtocol_VboxGetStatus
+  (JNIEnv *env, jclass cls, jint fd)
+{
+    jstring msg;
+    char *text = NULL;
+    cJSON *root,*entry;
+    int res;
+    res = VBOX_getStatus(fd);
+    root=   cJSON_CreateObject();
+    entry = cJSON_CreateObject();
+    cJSON_AddItemToObject(root, JSON_HEAD,entry);
+    cJSON_AddNumberToObject(entry,JSON_TYPE,VBOX_TYPE);
+    cJSON_AddNumberToObject(entry,"send_result",res);
+    msg = JSON_stringfy(env,root,text);
+    return msg;
+}
+
 JNIEXPORT jstring JNICALL Java_com_easivend_evprotocol_VboxProtocol_VboxGetInfo
   (JNIEnv *env, jclass cls, jint fd,jint type)
 {
@@ -322,6 +355,28 @@ JNIEXPORT jstring JNICALL Java_com_easivend_evprotocol_VboxProtocol_VboxGetInfo
     msg = JSON_stringfy(env,root,text);
     return msg;
 }
+
+
+
+
+JNIEXPORT jstring JNICALL Java_com_easivend_evprotocol_VboxProtocol_VboxResetInd
+  (JNIEnv *env, jclass cls, jint fd,jint dt)
+{
+    jstring msg;
+    char *text = NULL;
+    cJSON *root,*entry;
+    int res;
+    res = VBOX_resetInd(fd,dt);
+    root=   cJSON_CreateObject();
+    entry = cJSON_CreateObject();
+    cJSON_AddItemToObject(root, JSON_HEAD,entry);
+    cJSON_AddNumberToObject(entry,JSON_TYPE,VBOX_TYPE);
+    cJSON_AddNumberToObject(entry,"send_result",res);
+    msg = JSON_stringfy(env,root,text);
+    return msg;
+}
+
+
 
 
 JNIEXPORT jstring JNICALL Java_com_easivend_evprotocol_VboxProtocol_VboxVendoutInd

@@ -24,6 +24,7 @@
 //PC-->VMC
 #define VBOX_ACK            0x80
 #define VBOX_NAK            0x81
+#define VBOX_RESET_IND      0x84
 #define VBOX_GET_SETUP      0x90
 #define VBOX_GET_HUODAO     0x8A
 #define VBOX_HUODAO_IND     0x87
@@ -81,6 +82,8 @@ VBOX_MSG *VBOX_getMsg(void);
 int VBOX_sendAck(int32 port);
 int VBOX_getSetup(int32 port);
 int VBOX_getHuoDao(int32 port,int32 device);
+int VBOX_getStatus(int32 port);
 int VBOX_getInfo(int32 port,int32 type);
+int VBOX_resetInd(int32 port,int32 dt);
 int VBOX_vendoutInd(int32 port,int32 device,int32 method,int32 id,int32 type,int32 cost);
 #endif // VBOX_API_H

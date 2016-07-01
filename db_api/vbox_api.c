@@ -221,6 +221,18 @@ int VBOX_getHuoDao(int32 port,int32 device)
 }
 
 
+int VBOX_getStatus(int32 port)
+{
+    unsigned char in;
+    VBOX_MSG *msg = &vboxMsg;
+    in = 0;
+    msg->mt = VBOX_GET_STATUS;
+    msg->F7 = 0;
+    msg->datalen = 0;
+    return VBOX_sendMsg(port,msg);
+}
+
+
 
 int VBOX_getInfo(int32 port,int32 type)
 {
@@ -235,13 +247,26 @@ int VBOX_getInfo(int32 port,int32 type)
 }
 
 
+int VBOX_resetInd(int32 port,int32 dt)
+{
+    unsigned char in;
+    VBOX_MSG *msg = &vboxMsg;
+    in = 0;
+    msg->mt = VBOX_RESET_IND;
+    msg->F7 = 0;
+    msg->data[in++] = dt & 0xFF;
+    msg->datalen = in;
+    return VBOX_sendMsg(port,msg);
+}
+
+
 int VBOX_vendoutInd(int32 port,int32 device,int32 method,int32 id,int32 type,int32 cost)
 {
     unsigned char in;
     VBOX_MSG *msg = &vboxMsg;
     in = 0;
     msg->mt = VBOX_VENDOUT_IND;
-    msg->F7 = 0;
+    msg->F7 = 1;
 
     msg->data[in++] = (uint8)device;
     msg->data[in++] = (uint8)method;
