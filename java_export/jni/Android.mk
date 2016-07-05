@@ -32,6 +32,7 @@ LOCAL_C_INCLUDES+=$(TOP_DIR)/cpp_export
 
 
 LOCAL_SRC_FILES += $(LOCAL_PATH)/../com_easivend_evprotocol_EVprotocol.c
+LOCAL_SRC_FILES += $(LOCAL_PATH)/../com_easivend_evprotocol_VboxProtocol.c
 LOCAL_SRC_FILES += $(TOP_DIR)/ytimer/timer.c
 LOCAL_SRC_FILES += $(TOP_DIR)/yserialport/unix_yocserialport.c
 LOCAL_SRC_FILES += $(TOP_DIR)/yserialport/yoc_serialbase.c
