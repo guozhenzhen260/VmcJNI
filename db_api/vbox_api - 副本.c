@@ -11,11 +11,11 @@ const static uint8 VER_F0_0 = 0x40;
 const static uint8 CRC_LEN = 2;
 
 const static uint8 I_SF = 0;
-const static uint8 I_LEN = 2;
-const static uint8 I_VER = 3;
-const static uint8 I_MT = 4;
-const static uint8 I_SN = 5;
-const static uint8 I_DATA = 6;
+const static uint8 I_LEN = 1;
+const static uint8 I_VER = 2;
+const static uint8 I_MT = 3;
+const static uint8 I_SN = 4;
+const static uint8 I_DATA = 5;
 
 
 
@@ -96,7 +96,7 @@ static uint8 VBOX_recv(VBOX_MSG *msg,uint32 timeout)
 			continue;
 		}
 		if(index == 0){
-            if(ch == 0x24){
+            if(ch == HEAD_SF){
 				recvbuf[index++] = ch;
                 timeout += 200;
 			}
@@ -105,18 +105,15 @@ static uint8 VBOX_recv(VBOX_MSG *msg,uint32 timeout)
 			}
 		}
         else if(index == 1){
-            recvbuf[index++] = ch;
-        }
-        else if(index == 2){
 			len = ch;
 			recvbuf[index++] = ch;
 		}
 		else{
-            if(index >= (len + 2)){
+			if(index >= (len + 1)){
 				recvbuf[index++] = ch;
-                crc  = crc16(recvbuf,len + 1);
+				crc  = crc16(recvbuf,len); 
 				msg->recvlen = index;
-                if(crc == INTEG16(recvbuf[len + 1], recvbuf[len + 2])){
+				if(crc == INTEG16(recvbuf[len], recvbuf[len + 1])){
                     msg->mt = msg->recvbuf[I_MT];
                     msg->sn = msg->recvbuf[I_SN];
                     msg->ver = msg->recvbuf[I_VER] & 0x07;
@@ -142,8 +139,7 @@ static uint8 VBOX_send(VBOX_MSG *msg)
     uint16 crc = 0x0000;
     uint8 *sendbuf;
     in = 0;sendbuf = msg->sendbuf;
-    sendbuf[in++] = 0x24;
-    sendbuf[in++] = 0x24;
+    sendbuf[in++] = HEAD_SF;
     sendbuf[in++] = 0x00;
     sendbuf[in++] = (msg->F7 << 7) | (msg->ver & 0x07);
     sendbuf[in++] = msg->mt;
@@ -152,7 +148,7 @@ static uint8 VBOX_send(VBOX_MSG *msg)
     for(i = 0;i < msg->datalen;i++){
         sendbuf[in++] = msg->data[i];
     }
-    sendbuf[I_LEN] = in - 1;
+    sendbuf[I_LEN] = in;
     crc	= crc16(sendbuf,in);
     sendbuf[in++] = HUINT16(crc);
     sendbuf[in++] = LUINT16(crc);

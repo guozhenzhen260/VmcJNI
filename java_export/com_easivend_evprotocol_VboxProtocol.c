@@ -14,6 +14,14 @@
 #define VBOX_TYPE   911
 
 
+const static uint8 I_SF = 0;
+const static uint8 I_LEN = 2;
+const static uint8 I_VER = 3;
+const static uint8 I_MT = 4;
+const static uint8 I_SN = 5;
+const static uint8 I_DATA = 6;
+
+
 static jstring JSON_stringfy(JNIEnv *env,cJSON *root,char *text)
 {
     jstring msg;
@@ -117,7 +125,7 @@ JNIEXPORT jstring JNICALL Java_com_easivend_evprotocol_VboxProtocol_VboxReadMsg
             cJSON_AddNumberToObject(entry,"sn",vmsg->sn);
             cJSON_AddNumberToObject(entry,"ver",vmsg->ver);
             cJSON_AddNumberToObject(entry,"F7",vmsg->F7);
-            buf = (unsigned char *)vmsg->recvbuf;in = 5;
+            buf = (unsigned char *)vmsg->recvbuf;in = I_DATA;
             switch(vmsg->mt){
                 case VBOX_POLL:case VBOX_ACK_RPT:case VBOX_NAK_RPT:
                     in = 5;
