@@ -93,9 +93,9 @@ JNIEXPORT jstring JNICALL Java_com_easivend_evprotocol_VboxProtocol_VboxReadMsg
 {
     jstring msg;
     char *text = NULL;
-    cJSON *root,*entry;
+    cJSON *root,*entry,*jsonarr,*jsonobj;
     VBOX_MSG *vmsg;
-    unsigned char *buf,in,temp8,textbuf[32],i;
+    unsigned char *buf,in,temp8,temp81,textbuf[32],i;
 
     vmsg = VBOX_readMsg(fd,(uint32)timeout);
     root=cJSON_CreateObject();
@@ -211,10 +211,14 @@ JNIEXPORT jstring JNICALL Java_com_easivend_evprotocol_VboxProtocol_VboxReadMsg
                     cJSON_AddNumberToObject(entry,"device",buf[in++]);
                     temp8 = 5 + 1 + 2;
                     temp8 = vmsg->recvlen > temp8 ?vmsg->recvlen - temp8: 0;
+
+                    cJSON_AddItemToObject(entry,"huodao",jsonarr = cJSON_CreateArray());
                     for(i = 0;i < temp8;i++){
-                        memset((void *)textbuf,0,sizeof(textbuf));
-                        sprintf((char *)textbuf,"huodao%d",i + 1);
-                        cJSON_AddNumberToObject(entry,(const char *)textbuf,buf[in++]);
+                        cJSON_AddItemToArray(jsonarr,jsonobj = cJSON_CreateObject());
+                        cJSON_AddNumberToObject(jsonobj,"no",i + 1);
+                        temp81 = buf[in++];
+                        cJSON_AddNumberToObject(jsonobj,"state",(temp81 & (0x01 << 6)) ? 1 : 0);
+                        cJSON_AddNumberToObject(jsonobj,"remain",(temp81 & 0x3F));
                     }
                     break;
                 case VBOX_COST_RPT:
@@ -249,10 +253,12 @@ JNIEXPORT jstring JNICALL Java_com_easivend_evprotocol_VboxProtocol_VboxReadMsg
                         cJSON_AddNumberToObject(entry,"device",buf[in++]);
                         temp8 = 5 + 1 + 1 + 2;
                         temp8 = vmsg->recvlen > temp8 ?vmsg->recvlen - temp8: 0;
+                        cJSON_AddItemToObject(entry,"sp_id",jsonarr = cJSON_CreateArray());
                         for(i = 0;i < temp8;i++){
-                            memset((void *)textbuf,0,sizeof(textbuf));
-                            sprintf((char *)textbuf,"sp_id%d",i + 1);
-                            cJSON_AddNumberToObject(entry,(const char *)textbuf,buf[in++]);
+                            cJSON_AddItemToArray(jsonarr,jsonobj = cJSON_CreateObject());
+                            //cJSON_AddNumberToObject(jsonobj,"no",i + 1);
+                            //cJSON_AddNumberToObject(jsonobj,"sp_id",buf[in++]);
+                            cJSON_AddNumberToObject(jsonobj,"id",buf[in++]);
                         }
                     }
                     else if(temp8 == 12){
@@ -260,10 +266,12 @@ JNIEXPORT jstring JNICALL Java_com_easivend_evprotocol_VboxProtocol_VboxReadMsg
                         cJSON_AddNumberToObject(entry,"device",buf[in++]);
                         temp8 = 5 + 1 + 1 + 2;
                         temp8 = vmsg->recvlen > temp8 ?vmsg->recvlen - temp8: 0;
+                        cJSON_AddItemToObject(entry,"sp_price",jsonarr = cJSON_CreateArray());
                         for(i = 0;i < (temp8 / 2);i++){
-                            memset((void *)textbuf,0,sizeof(textbuf));
-                            sprintf((char *)textbuf,"price_id%d",i + 1);
-                            cJSON_AddNumberToObject(entry,(const char *)textbuf,INTEG16(buf[in + 0],buf[in + 1]));in += 2;
+                            cJSON_AddItemToArray(jsonarr,jsonobj = cJSON_CreateObject());
+                            //cJSON_AddNumberToObject(jsonobj,"no",i + 1);
+                            //cJSON_AddNumberToObject(jsonobj,"sp_price",INTEG16(buf[in + 0],buf[in + 1]));in += 2;
+                            cJSON_AddNumberToObject(jsonobj,"id",INTEG16(buf[in + 0],buf[in + 1]));in += 2;
                         }
                     }
                     else{
