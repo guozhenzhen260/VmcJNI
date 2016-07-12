@@ -128,7 +128,7 @@ JNIEXPORT jstring JNICALL Java_com_easivend_evprotocol_VboxProtocol_VboxReadMsg
             buf = (unsigned char *)vmsg->recvbuf;in = I_DATA;
             switch(vmsg->mt){
                 case VBOX_POLL:case VBOX_ACK_RPT:case VBOX_NAK_RPT:
-                    in = 5;
+                    in = I_DATA;
                     break;
                 case VBOX_VMC_SETUP:
                     cJSON_AddNumberToObject(entry,"hd_num",buf[in++]);
@@ -159,7 +159,7 @@ JNIEXPORT jstring JNICALL Java_com_easivend_evprotocol_VboxProtocol_VboxReadMsg
                     cJSON_AddNumberToObject(entry,"huodao",buf[in++]);
                     break;
                 case VBOX_REQUEST:
-                    in = 5;
+                    in = I_DATA;
                     break;
                 case VBOX_ADMIN_RPT:
                     temp8 = buf[in++];
@@ -217,7 +217,7 @@ JNIEXPORT jstring JNICALL Java_com_easivend_evprotocol_VboxProtocol_VboxReadMsg
                     break;
                 case VBOX_HUODAO_RPT:
                     cJSON_AddNumberToObject(entry,"device",buf[in++]);
-                    temp8 = 5 + 1 + 2;
+                    temp8 = I_DATA + 1 + 2;
                     temp8 = vmsg->recvlen > temp8 ?vmsg->recvlen - temp8: 0;
                     for(i = 0;i < temp8;i++){
                         memset((void *)textbuf,0,sizeof(textbuf));
@@ -255,7 +255,7 @@ JNIEXPORT jstring JNICALL Java_com_easivend_evprotocol_VboxProtocol_VboxReadMsg
                     else if(temp8 == 10){
                         temp8 = 0;
                         cJSON_AddNumberToObject(entry,"device",buf[in++]);
-                        temp8 = 5 + 1 + 1 + 2;
+                        temp8 = I_DATA + 1 + 1 + 2;
                         temp8 = vmsg->recvlen > temp8 ?vmsg->recvlen - temp8: 0;
                         for(i = 0;i < temp8;i++){
                             memset((void *)textbuf,0,sizeof(textbuf));
@@ -266,7 +266,7 @@ JNIEXPORT jstring JNICALL Java_com_easivend_evprotocol_VboxProtocol_VboxReadMsg
                     else if(temp8 == 12){
                         temp8 = 0;
                         cJSON_AddNumberToObject(entry,"device",buf[in++]);
-                        temp8 = 5 + 1 + 1 + 2;
+                        temp8 = I_DATA + 1 + 1 + 2;
                         temp8 = vmsg->recvlen > temp8 ?vmsg->recvlen - temp8: 0;
                         for(i = 0;i < (temp8 / 2);i++){
                             memset((void *)textbuf,0,sizeof(textbuf));
