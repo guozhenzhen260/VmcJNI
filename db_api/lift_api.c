@@ -93,7 +93,7 @@ static void LIFT_LOG(uint8 type,uint8 *data,uint8 len)
         sprintf((char *)&buf[i * 3],"%02x ",data[i]);
     }
     if(type == 1){
-        EV_LOGD("LF-Send[%d]:%s\n",len,buf);
+        EV_LOGD("LF-Send[%d]:%s",len,buf);
     }
     else{
         EV_LOGD("LF-Recv[%d]:%s\n",len,buf);
@@ -410,16 +410,15 @@ uint8 LIFT_vendoutReq(uint8 bin,uint8 row,uint8 column)
 	int32 timeout;
 	timeout = 90;flow = 0;
 	while(timeout > 0){
+        EV_LOGD("LIFT_vendoutReq:timeout=%d\n",timeout);
 		res = LIFT_vmcStatusReq(bin);
 		if(res == LIFT_STATUS_NORMAL){
 			flow = 1;
 			break;
 		}
 		else{
-			if(res != LIFT_STATUS_COM_ERR){
-				EV_msleep(1000);
-				timeout--;
-			}			
+            EV_msleep(1000);
+            timeout--;
 		}
 	}
 	if(flow == 0){ //”–Œ Ã‚

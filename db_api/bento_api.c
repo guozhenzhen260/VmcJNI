@@ -25,7 +25,7 @@ static void BT_LOG(uint8 type,uint8 *data,uint8 len)
         sprintf((char *)&buf[i * 3],"%02x ",data[i]);
     }
     if(type == 1){
-        EV_LOGD("BT-Send[%d]:%s\n",len,buf);
+        EV_LOGD("BT-Send[%d]:%s",len,buf);
     }
     else{
         EV_LOGD("BT-Recv[%d]:%s\n",len,buf);
