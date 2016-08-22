@@ -151,7 +151,8 @@ JNIEXPORT jstring JNICALL Java_com_easivend_evprotocol_VboxProtocol_VboxReadMsg
                     cJSON_AddNumberToObject(entry,"huodao",buf[in++]);
                     break;
                 case VBOX_REQUEST:
-                    in = 5;
+                    temp8 = buf[in++];
+                    cJSON_AddNumberToObject(entry,"type",temp8);
                     break;
                 case VBOX_ADMIN_RPT:
                     temp8 = buf[in++];
