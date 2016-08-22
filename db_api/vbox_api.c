@@ -196,6 +196,15 @@ int VBOX_sendAck(int32 port)
     return VBOX_sendMsg(port,msg);
 }
 
+int VBOX_sendNak(int32 port)
+{
+    VBOX_MSG *msg = &vboxMsg;
+    msg->mt = VBOX_NAK;
+    msg->F7 = 0;
+    msg->datalen = 0;
+    return VBOX_sendMsg(port,msg);
+}
+
 
 int VBOX_getSetup(int32 port)
 {

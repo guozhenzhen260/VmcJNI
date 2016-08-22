@@ -301,6 +301,14 @@ JNIEXPORT jstring JNICALL Java_com_easivend_evprotocol_VboxProtocol_VboxSendAck
     return JSON_serialSendRpt(env,res);
 }
 
+JNIEXPORT jstring JNICALL Java_com_easivend_evprotocol_VboxProtocol_VboxSendNak
+  (JNIEnv *env, jclass cls, jint fd)
+{
+    int res;
+    res = VBOX_sendNak(fd);
+    return JSON_serialSendRpt(env,res);
+}
+
 
 JNIEXPORT jstring JNICALL Java_com_easivend_evprotocol_VboxProtocol_VboxGetSetup
   (JNIEnv *env, jclass cls, jint fd)
