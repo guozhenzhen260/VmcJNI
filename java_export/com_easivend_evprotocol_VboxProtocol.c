@@ -151,7 +151,8 @@ JNIEXPORT jstring JNICALL Java_com_easivend_evprotocol_VboxProtocol_VboxReadMsg
                     cJSON_AddNumberToObject(entry,"huodao",buf[in++]);
                     break;
                 case VBOX_REQUEST:
-                    in = 5;
+                    temp8 = buf[in++];
+                    cJSON_AddNumberToObject(entry,"type",temp8);
                     break;
                 case VBOX_ADMIN_RPT:
                     temp8 = buf[in++];
@@ -297,6 +298,14 @@ JNIEXPORT jstring JNICALL Java_com_easivend_evprotocol_VboxProtocol_VboxSendAck
 {
     int res;
     res = VBOX_sendAck(fd);
+    return JSON_serialSendRpt(env,res);
+}
+
+JNIEXPORT jstring JNICALL Java_com_easivend_evprotocol_VboxProtocol_VboxSendNak
+  (JNIEnv *env, jclass cls, jint fd)
+{
+    int res;
+    res = VBOX_sendNak(fd);
     return JSON_serialSendRpt(env,res);
 }
 
