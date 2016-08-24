@@ -64,10 +64,10 @@ static void VBOX_LOG(uint8 type,uint8 *data,uint8 len)
         sprintf((char *)&buf[i * 3],"%02x ",data[i]);
     }
     if(type == 1){
-        EV_LOGD("VB-Send[%d]:%s\n",len,buf);
+        EV_LOGD("VB-Send[%d]:%s",len,buf);
     }
     else{
-        EV_LOGD("VB-Recv[%d]:%s\n",len,buf);
+        EV_LOGI("VB-Recv[%d]:%s\n",len,buf);
     }
 }
 

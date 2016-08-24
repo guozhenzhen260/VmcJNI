@@ -96,7 +96,7 @@ static void LIFT_LOG(uint8 type,uint8 *data,uint8 len)
         EV_LOGD("LF-Send[%d]:%s",len,buf);
     }
     else{
-        EV_LOGD("LF-Recv[%d]:%s\n",len,buf);
+        EV_LOGI("LF-Recv[%d]:%s\n",len,buf);
     }
 }
 

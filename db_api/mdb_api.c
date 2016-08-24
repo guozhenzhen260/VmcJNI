@@ -47,10 +47,10 @@ static void MDB_LOG(uint8 type,uint8 *data,uint8 len)
         sprintf((char *)&buf[i * 3],"%02x ",data[i]);
     }
     if(type == 1){
-        EV_LOGD("MDB-Send[%d]:%s\n",len,buf);
+        EV_LOGD("MDB-Send[%d]:%s",len,buf);
     }
     else{
-        EV_LOGD("MDB-Recv[%d]:%s\n",len,buf);
+        EV_LOGI("MDB-Recv[%d]:%s\n",len,buf);
     }
 }
 
