@@ -33,7 +33,7 @@ void COL_LOG(uint8 type,uint8 *data,uint8 len)
         EV_LOGD("BT-Send[%d]:%s",len,buf);
 	}
 	else{
-		EV_LOGD("BT-Recv[%d]:%s\n",len,buf);
+        EV_LOGI("BT-Recv[%d]:%s\n",len,buf);
 	}
 }
 
@@ -179,25 +179,25 @@ uint8 Column_sendMsg()
     uint8 i,res;
 
 	memset((void *)&colrecvmsg,0,sizeof(colrecvmsg));	
-    for(i = 0;i < 3;i++)
+      for(i = 0;i < 2;i++)
 	{
-        COL_send();		
-        res = COL_recv(&colrecvmsg);
+	        COL_send();		
+	        res = COL_recv(&colrecvmsg);
 		//1收到ack
-        if(res == 1)
+       	 if(res == 1)
 		{
 			memset((void *)&colrecvmsg,0,sizeof(colrecvmsg));
 			res = COL_recv(&colrecvmsg);
 			//2收到结果
-            if(res == 1)
-            {
-                return 1;
-            } 
+	            if(res == 1)
+	            {
+	                return 1;
+	            } 
 			else
 			{
 			    return 0;
 			}
-        }
+           }
     }
     return 0;
 }
