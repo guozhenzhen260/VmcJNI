@@ -401,14 +401,36 @@ uint8 LIFT_vmcChuchou(uint8 bin,uint8 flag)
 
 
 
+static uint8 LIFT_vendoutSendMsg(uint8 bin,uint8 row,uint8 column)
+{
+    uint8 res,res1,i;
+    for(i = 0;i < 3;i++){
+        EV_msleep(500);
+        res = LIFT_vmcVendingReq(bin,row,column);
+        if(res != 1){
+            EV_msleep(50);
+            res1 = LIFT_vmcVedingResult(bin);
+            if(res1 == LIFT_VENDOUT_VENDING){
+                return 1;
+            }
+        }
+        else{
+            return 1;
+        }
+    }
 
+    return res;
+
+}
 
 //返回0:失败，1：成功，2：数据错误 3：无货 4：卡货 5：取货门未开启 6：货物未取走 7：未定义错误	0xff：通信失败
 uint8 LIFT_vendoutReq(uint8 bin,uint8 row,uint8 column)
 {
-	uint8 res,res1,flow,err,tradeResult,vendoutOk,i;
-	int32 timeout;
-	timeout = 90;flow = 0;
+    uint8 res,flow,tradeResult;
+    uint8 vendSent,isNotTalk,isTrading;
+    int32 timeout;
+
+    timeout = 60;flow = 0;
 	while(timeout > 0){
         EV_LOGD("LIFT_vendoutReq:timeout=%d\n",timeout);
 		res = LIFT_vmcStatusReq(bin);
@@ -425,42 +447,46 @@ uint8 LIFT_vendoutReq(uint8 bin,uint8 row,uint8 column)
 		return res;
 	}
 
-
-	// 2 出货
-	for(i = 0;i < 3;i++){
-		EV_msleep(500);
-		res = LIFT_vmcVendingReq(bin,row,column);
-		if(res != 1){
-			EV_msleep(50);
-			res1 = LIFT_vmcVedingResult(bin);
-			if(res1 == LIFT_VENDOUT_VENDING){
-				vendoutOk = 1;
-				break;
-			}
-		}
-		else{
-			vendoutOk = 1;
-			break;
-		}
-	}
-
-	if(vendoutOk != 1){
-		return LIFT_VENDOUT_COM_ERR;
-	}
-
 	// 3查询
-	vendoutOk = 0;
+    isNotTalk = 0;
+    vendSent = 0;
+    isTrading = 0;
 	tradeResult = LIFT_VENDOUT_FAIL;
-	timeout = 240;
+    timeout = 180;
 	while(timeout > 0){
-		res = LIFT_vmcVedingResult(bin);//检测出货结果
-		if(res > 0 && res != LIFT_VENDOUT_VENDING){ //出货结果
-			return res;
-		}
-		else{
-			EV_msleep(1000);
-			timeout--;
-		}
+        if(vendSent == 0){
+            // 2 出货
+            res = LIFT_vendoutSendMsg(bin,row,column);
+            if(res != 1){
+                return LIFT_VENDOUT_COM_ERR;
+            }
+            vendSent = 1;
+            EV_msleep(500);
+        }
+        else{
+            res = LIFT_vmcVedingResult(bin);//检测出货结果
+            if(res > 0 && res != LIFT_VENDOUT_VENDING){ //出货结果
+                tradeResult = res;
+                if(res == LIFT_VENDOUT_GOODS_NOT_TAKE && isTrading == 0){
+                    EV_msleep(2000);
+                    timeout -= 2;
+                    isNotTalk = 1;
+                    vendSent = 0;//re send
+                }
+                else{
+                    return res;
+                }
+            }
+            else{
+                if(isNotTalk == 1){
+                    isNotTalk = 0;
+                    isTrading = 1;
+                    timeout += 60;
+                }
+                EV_msleep(1000);
+                timeout--;
+            }
+        }
 	}
 
 	return tradeResult;
