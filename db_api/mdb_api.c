@@ -124,9 +124,20 @@ uint8 MDB_recv(MDB_MSG *msg,uint32 timeout)
     uint8 ch,index = 0;
     uint8 crc;
     uint32 t = timeout;
+    uint8 buf[FRS_BUF_SIZE] = {0};
+    uint8 no,rlen,i;
+    int32 res;
     while(t){
-        if(DB_getCh(msg->port,(char *)&ch) > 0){
+        res = FRS_recv(msg->port,&no,buf,&rlen,1000);
+        if(res != 1){
+            EV_msleep(50);
+            t = (t <= 50) ? 0 : t - 50;
+            continue;
+        }
+
+        for(i = 0;i < rlen;i++){
             //EV_LOGD("ch=%x,index=%d",ch,index);
+            ch = buf[i];
             if(index == SF){
                 if(ch == HEAD_DB){
                     msg->data[index++] = ch;
@@ -157,10 +168,8 @@ uint8 MDB_recv(MDB_MSG *msg,uint32 timeout)
                 msg->data[index++] = ch;
             }
         }
-        else{
-            EV_msleep(50);
-            t = (t <= 50) ? 0 : t - 50;
-        }
+
+
     }
     return 0;
 }
@@ -183,8 +192,20 @@ void MDB_package(MDB_MSG *msg)
 }
 
 uint8 MDB_send(MDB_MSG *msg){
+    int i;
+
+
+
     MDB_LOG(1,msg->data,msg->len);
-    return yserial_write(msg->port,(char *)msg->data,msg->len);
+
+
+    for(i = 0;i < 8;i++){
+        FRS_send(msg->port,i,(char *)msg->data,msg->len);
+    }
+
+    return 1;
+
+    //return yserial_write(msg->port,(char *)msg->data,msg->len);
 }
 
 

@@ -128,7 +128,7 @@ int32 yserial_open(char *portName)
         return -1;
     }
     winserial_setRWBuffer(port->fd,1024,1024);
-    winserial_setBaudRate(port->fd,BAUD9600);
+    winserial_setBaudRate(port->fd,BAUD115200);
     winserial_setDataBits(port->fd,DATA_8);
     winserial_setStopBits(port->fd,STOP_1);
     winserial_setParity(port->fd,PAR_NONE);
@@ -142,7 +142,7 @@ int32 yserial_open(char *portName)
         free(port);
         return -1;
     }
-    unixserial_setBaudRate(port->fd,BAUD9600);
+    unixserial_setBaudRate(port->fd,BAUD115200);
     unixserial_setDataBits(port->fd,DATA_8);
     unixserial_setStopBits(port->fd,STOP_1);
     unixserial_setParity(port->fd,PAR_NONE);

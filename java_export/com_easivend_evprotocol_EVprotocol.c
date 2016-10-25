@@ -1317,3 +1317,18 @@ JNIEXPORT jstring JNICALL Java_com_easivend_evprotocol_EVprotocol_EVmdbCoinConfi
     return msg;
 }
 
+
+/*********************************************************************************************************
+** Function name	:		EVserialTest
+** Descriptions		:		tset
+** input parameters	:
+*
+** output parameters:		无
+** Returned value	:		1：发送成功  0：发送失败
+*********************************************************************************************************/
+JNIEXPORT jstring JNICALL Java_com_easivend_evprotocol_EVprotocol_EVserialTest
+(JNIEnv *env, jclass cls, jint fd)
+{
+    FRS_test(fd);
+}
+

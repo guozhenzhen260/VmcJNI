@@ -1,7 +1,7 @@
 #ifndef _EV_CONFIG_H_
 #define _EV_CONFIG_H_
 #include "LOGC.h"
-
+#include "freak_rs_api.h"
 //适用于安卓的特定定位输出
 #if (defined EV_ANDROID)
 #include<android/log.h>
