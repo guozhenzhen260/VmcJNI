@@ -46,6 +46,7 @@ LOCAL_SRC_FILES += $(TOP_DIR)/db_api/vbox_api.c
 LOCAL_SRC_FILES += $(TOP_DIR)/db_api/column_api.c
 LOCAL_SRC_FILES += $(TOP_DIR)/db_api/db_serial.c
 LOCAL_SRC_FILES += $(TOP_DIR)/db_api/db_json.c
+LOCAL_SRC_FILES += $(TOP_DIR)/db_api/freak_rs_api.c
 LOCAL_SRC_FILES += $(TOP_DIR)/general/cJSON.c
 LOCAL_SRC_FILES += $(TOP_DIR)/general/LOGC.c
 
