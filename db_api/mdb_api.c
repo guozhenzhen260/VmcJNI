@@ -128,7 +128,7 @@ uint8 MDB_recv(MDB_MSG *msg,uint32 timeout)
     uint8 no,rlen,i;
     int32 res;
     while(t){
-        res = FRS_recv(msg->port,&no,buf,&rlen,1000);
+        res = FRS_recv(msg->port,&no,buf,&rlen,100);
         if(res != 1){
             EV_msleep(50);
             t = (t <= 50) ? 0 : t - 50;
@@ -192,18 +192,10 @@ void MDB_package(MDB_MSG *msg)
 }
 
 uint8 MDB_send(MDB_MSG *msg){
-    int i;
-
-
 
     MDB_LOG(1,msg->data,msg->len);
 
-
-    for(i = 0;i < 8;i++){
-        FRS_send(msg->port,i,(char *)msg->data,msg->len);
-    }
-
-    return 1;
+    return FRS_send(msg->port,1,(char *)msg->data,msg->len);
 
     //return yserial_write(msg->port,(char *)msg->data,msg->len);
 }

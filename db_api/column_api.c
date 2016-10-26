@@ -3,7 +3,7 @@
 #include "db_serial.h"
 #include "timer.h"
 #include "yoc_serialport.h"
-
+#include "freak_rs_api.h"
 
 typedef struct _st_mdb_msg_{    
     uint8 data[128];    //数据段
@@ -17,9 +17,10 @@ typedef struct _st_mdb_msg_{
 	uint8 chk;      //chk
 }COL_MSG;
 
-COL_MSG colrecvmsg;
-COL_MSG colsendmsg;
-int32 port;
+static COL_MSG colrecvmsg;
+static COL_MSG colsendmsg;
+static int32 port;
+static int32 serialNo;
 
 
 
@@ -40,9 +41,9 @@ void COL_LOG(uint8 type,uint8 *data,uint8 len)
 uint8 COL_xorCheck(uint8 *msg,uint8 len)
 {
 	uint8 i, xor = 0;
-	for(i=0;i<len;i++) 
-	{
-		xor ^= *(msg+i);
+    for(i=0;i<len;i++)
+    {
+        xor ^= *(msg+i);
 	}
 	return xor;
 
@@ -54,19 +55,28 @@ uint8 COL_recv(COL_MSG *msg)
     uint8 in = 0,len = 0,ch,out=0;
     int32 r,timeout;
     uint8 xor;
-	
+    uint8 buf[FRS_BUF_SIZE] = {0};
+    uint8 no,rlen,i,res;
     if(msg == NULL){
         EV_LOGE("EV_bento_recv:msg=NULL");
         return 0;
     }
     //EV_LOGD("BT_recv:port=%d",port);
     timeout = 25000;
-    while(timeout)
+    while(timeout > 0)
 	{
-        r = DB_getCh(port,(char *)&ch);
+
+        //r = DB_getCh(port,(char *)&ch);
         // EV_LOGD("BT_recv:timeout=%d",timeout);
-        if(r <= 0)//读一个字节数据
-		{
+        //if(r <= 0)//读一个字节数据
+        //{
+       //     EV_msleep(50);
+       //     timeout = (timeout <= 50) ? 0 : timeout - 50;
+       //     continue;
+       // }
+
+        res = FRS_recv(port,&no,buf,&rlen,100);
+        if(res != 1){
             EV_msleep(50);
             timeout = (timeout <= 50) ? 0 : timeout - 50;
             continue;
@@ -75,62 +85,64 @@ uint8 COL_recv(COL_MSG *msg)
        // Command ACK:     EE＋08+SN+70+Column code +Status+00＋CHK
        // Mission ACK:     EE＋08+SN+70+Column code +Status+00＋CHK 
         //包头
-        if(in == 0)
-		{
-            if(ch == COL_RECV_HEAD)
-			{
+
+        for(i = 0;i < rlen;i++){
+            if(in == 0)
+            {
+                if(ch == COL_RECV_HEAD)
+                {
+                    msg->data[in++] = ch;
+                }
+                else
+                {
+                    in = 0;
+                }
+            }
+            //len
+            else if(in == 1)
+            {
+                if(ch > 128)
+                {
+                    in = 0;
+                }
+                else
+                {
+                    msg->data[in++] = ch;
+                    len = ch;
+                }
+            }
+            //chk
+            else if(in >= (len - 1))
+            {
+                msg->data[in] = ch;
+                //COL_LOG(0,msg->data,len);
+                xor = COL_xorCheck(msg->data,(len - 1));
+                if(xor == msg->data[in])
+                {
+                    msg->head=msg->data[out++];
+                    msg->len=msg->data[out++];
+                    msg->sn=msg->data[out++];
+                    msg->cmd=msg->data[out++];
+                    msg->no=msg->data[out++];
+                    msg->none=msg->data[out++];
+                    msg->goc=msg->data[out++];
+                    msg->chk=msg->data[out++];
+                    COL_LOG(0,msg->data,msg->len);
+                    return 1;
+                }
+                else
+                {
+                    return 0;
+                }
+
+            }
+            //data
+            else
+            {
                 msg->data[in++] = ch;
-            }
-            else
-			{
-                in = 0;
-            }
-        }
-		//len
-        else if(in == 1)
-		{
-            if(ch > 128)
-			{
-                in = 0;
-            }
-            else
-			{
-                msg->data[in++] = ch;
-                len = ch;
-            }
-        }
-		//chk
-        else if(in >= (len - 1))
-		{
-            msg->data[in] = ch;
-			//COL_LOG(0,msg->data,len);			 
-            xor = COL_xorCheck(msg->data,(len - 1));
-            if(xor == msg->data[in])
-			{                
-				msg->head=msg->data[out++];
-				msg->len=msg->data[out++];
-				msg->sn=msg->data[out++];
-				msg->cmd=msg->data[out++];
-				msg->no=msg->data[out++];
-				msg->none=msg->data[out++];
-				msg->goc=msg->data[out++];
-				msg->chk=msg->data[out++];
-				COL_LOG(0,msg->data,msg->len);
-                return 1;
-            }
-            else
-			{
-                return 0;
             }
 
         }
-		//data
-        else
-		{
-            msg->data[in++] = ch;
-        }
-       
-
     }
     return 0;
 
@@ -168,7 +180,9 @@ uint8 COL_send()
 	//EV_LOGD("EVDrvsend >> %02x,%02x,%02x,%02x,%02x,%02x,%02x,%02x\n",colsendmsg.data[0],colsendmsg.data[1],colsendmsg.data[2],
 	//	colsendmsg.data[3],colsendmsg.data[4],colsendmsg.data[5],colsendmsg.data[6],colsendmsg.data[7]);
 	yserial_clear(port);
-	yserial_write(port,colsendmsg.data,out);
+
+    FRS_send(port,2,colsendmsg.data,out);
+    //yserial_write(port,colsendmsg.data,out);
 	COL_LOG(1,colsendmsg.data,out);
 	return 1;
 }
@@ -235,6 +249,7 @@ int32 Column_open(const ST_COL_OPEN_REQ *req,ST_COL_OPEN_RPT *rpt)
     rpt->fd = req->fd;
     rpt->no = req->no;
     port = rpt->fd;
+    serialNo = req->addr;
     colsendmsg.cmd = COL_SEND_OPEN;
     colsendmsg.no = rpt->no;	
 	colsendmsg.goc=req->goc;	
