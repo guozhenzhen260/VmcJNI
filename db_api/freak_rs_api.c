@@ -28,7 +28,7 @@ static void FRS_LOG(uint8 type,uint8 *data,uint8 len)
     }
 }
 
-int32 FRS_send(int32 fd,int32 port,char *data,int32 len)
+int32 FRS_send(int32 fd,int32 port,uint8 *data,int32 len)
 {
     uint8 i,index;
     uint8 buf[FRS_BUF_SIZE] = {0};
@@ -58,13 +58,33 @@ int32 FRS_send(int32 fd,int32 port,char *data,int32 len)
 }
 
 
-int32 FRS_recv(int32 fd,int32 *port,char *data,int32 *rlen,int32 timeout)
+int32 FRS_recv(int32 fd,int32 *port,uint8 **data,int32 *rlen,int32 timeout)
 {
     uint8 ch,index;
     uint8 crc,no,i;
     uint8 len = 0;
     int32 r;
     uint8 recvbuf[FRS_BUF_SIZE] = {0};
+
+    if(data == NULL){
+        EV_LOGW("FRS_R:data == NULL\n");
+        return 0;
+    }
+    if(*data == NULL){
+        EV_LOGW("FRS_R:*data == NULL\n");
+        return 0;
+    }
+    if(rlen == NULL){
+        EV_LOGW("FRS_R:rlen == NULL\n");
+        return 0;
+    }
+    if(port == NULL){
+        EV_LOGW("FRS_R:port == NULL\n");
+        return 0;
+    }
+
+
+
     index = 0;
     while(timeout > 0){
         r = DB_getCh(fd,(char *)&ch);
@@ -74,7 +94,7 @@ int32 FRS_recv(int32 fd,int32 *port,char *data,int32 *rlen,int32 timeout)
             continue;
         }
 
-        EV_LOGD("FRS_R:%x\n",ch);
+        //EV_LOGD("FRS_R:%x\n",ch);
         if(index == 0){
             if(ch == 0xFF){
                 recvbuf[index++] = ch;
@@ -106,15 +126,14 @@ int32 FRS_recv(int32 fd,int32 *port,char *data,int32 *rlen,int32 timeout)
                 crc  = FRS_crc(recvbuf,len + 4);
                 FRS_LOG(2,recvbuf,index);
                 if(crc == recvbuf[index - 1]){
+                    EV_LOGD("FRS_R:ok no=%d len=%x\n",no,len);
                     *port = no;
-                    for(i = 0;i < len;i++){
-                        data[i] = recvbuf[4 + i];
-                    }
                     *rlen = len;
+                    memcpy(*data,&recvbuf[4],len);
                     return 1;
                 }
                 else{
-                    FRS_LOG(2,recvbuf,index);
+                    EV_LOGD("FRS_R:crc error\n");
                     return 2;
                 }
             }
@@ -123,7 +142,8 @@ int32 FRS_recv(int32 fd,int32 *port,char *data,int32 *rlen,int32 timeout)
             }
         }
     }
-    FRS_LOG(2,recvbuf,index);
+    //EV_LOGD("FRS_R:timeout\n");
+    //FRS_LOG(2,recvbuf,index);
     return 0;
 }
 

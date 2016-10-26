@@ -31,10 +31,10 @@ void COL_LOG(uint8 type,uint8 *data,uint8 len)
 		sprintf((char *)&buf[i * 3],"%02x ",data[i]);
 	}
 	if(type == 1){
-        EV_LOGD("BT-Send[%d]:%s",len,buf);
+        EV_LOGD("SP-Send[%d]:%s",len,buf);
 	}
 	else{
-        EV_LOGI("BT-Recv[%d]:%s\n",len,buf);
+        EV_LOGI("SP-Recv[%d]:%s\n",len,buf);
 	}
 }
 
@@ -55,27 +55,19 @@ uint8 COL_recv(COL_MSG *msg)
     uint8 in = 0,len = 0,ch,out=0;
     int32 r,timeout;
     uint8 xor;
-    uint8 buf[FRS_BUF_SIZE] = {0};
-    uint8 no,rlen,i,res;
+    uint8 buf[FRS_BUF_SIZE] = {0},*rbuf;
+    int32 no,rlen,i,res;
     if(msg == NULL){
         EV_LOGE("EV_bento_recv:msg=NULL");
         return 0;
     }
     //EV_LOGD("BT_recv:port=%d",port);
+
+    rbuf = buf;
     timeout = 25000;
     while(timeout > 0)
 	{
-
-        //r = DB_getCh(port,(char *)&ch);
-        // EV_LOGD("BT_recv:timeout=%d",timeout);
-        //if(r <= 0)//读一个字节数据
-        //{
-       //     EV_msleep(50);
-       //     timeout = (timeout <= 50) ? 0 : timeout - 50;
-       //     continue;
-       // }
-
-        res = FRS_recv(port,&no,buf,&rlen,100);
+        res = FRS_recv(port,&no,&rbuf,&rlen,100);
         if(res != 1){
             EV_msleep(50);
             timeout = (timeout <= 50) ? 0 : timeout - 50;
@@ -87,6 +79,8 @@ uint8 COL_recv(COL_MSG *msg)
         //包头
 
         for(i = 0;i < rlen;i++){
+            ch = rbuf[i];
+           // EV_LOGD("index=%d,ch=%d\n",in,ch);
             if(in == 0)
             {
                 if(ch == COL_RECV_HEAD)
@@ -180,10 +174,13 @@ uint8 COL_send()
 	//EV_LOGD("EVDrvsend >> %02x,%02x,%02x,%02x,%02x,%02x,%02x,%02x\n",colsendmsg.data[0],colsendmsg.data[1],colsendmsg.data[2],
 	//	colsendmsg.data[3],colsendmsg.data[4],colsendmsg.data[5],colsendmsg.data[6],colsendmsg.data[7]);
 	yserial_clear(port);
+    COL_LOG(1,colsendmsg.data,out);
+
 
     FRS_send(port,2,colsendmsg.data,out);
+
     //yserial_write(port,colsendmsg.data,out);
-	COL_LOG(1,colsendmsg.data,out);
+
 	return 1;
 }
 

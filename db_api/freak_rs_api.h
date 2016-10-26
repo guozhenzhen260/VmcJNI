@@ -8,8 +8,8 @@
 #define FRS_BUF_SIZE    128
 
 
-int32 FRS_send(int32 fd,int32 port,char *data,int32 len);
-int32 FRS_recv(int32 fd,int32 *port,char *data,int32 *rlen,int32 timeout);
+int32 FRS_send(int32 fd,int32 port,uint8 *data,int32 len);
+int32 FRS_recv(int32 fd,int32 *port,uint8 **data,int32 *rlen,int32 timeout);
 
 int32 FRS_test(int32 fd);
 

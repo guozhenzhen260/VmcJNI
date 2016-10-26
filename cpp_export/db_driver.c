@@ -32,7 +32,7 @@ int32   EV_API  EV_portRegister(int8 *portName)
         return -1;
     }
     yserial_setParity(fd,PAR_NONE);
-    yserial_setBaudRate(fd,9600);
+    yserial_setBaudRate(fd,115200);
     yserial_setDataBits(fd,DATA_8);
     yserial_setStopBits(fd,STOP_1);
     yserial_setTimeout(fd,10);

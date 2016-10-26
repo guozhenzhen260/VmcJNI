@@ -124,11 +124,13 @@ uint8 MDB_recv(MDB_MSG *msg,uint32 timeout)
     uint8 ch,index = 0;
     uint8 crc;
     uint32 t = timeout;
-    uint8 buf[FRS_BUF_SIZE] = {0};
-    uint8 no,rlen,i;
+    uint8 buf[FRS_BUF_SIZE] = {0},*rbuf;
+    int32 no,rlen,i;
     int32 res;
+    index = 0;
+    rbuf = buf;
     while(t){
-        res = FRS_recv(msg->port,&no,buf,&rlen,100);
+        res = FRS_recv(msg->port,&no,&rbuf,&rlen,100);
         if(res != 1){
             EV_msleep(50);
             t = (t <= 50) ? 0 : t - 50;
@@ -136,8 +138,8 @@ uint8 MDB_recv(MDB_MSG *msg,uint32 timeout)
         }
 
         for(i = 0;i < rlen;i++){
-            //EV_LOGD("ch=%x,index=%d",ch,index);
-            ch = buf[i];
+            ch = rbuf[i];
+            //EV_LOGD("index=%d,ch=%x",index,ch);
             if(index == SF){
                 if(ch == HEAD_DB){
                     msg->data[index++] = ch;
