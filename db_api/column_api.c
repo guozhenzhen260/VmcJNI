@@ -177,7 +177,7 @@ uint8 COL_send()
     COL_LOG(1,colsendmsg.data,out);
 
 
-    FRS_send(port,2,colsendmsg.data,out);
+    FRS_send(port,serialNo,colsendmsg.data,out);
 
     //yserial_write(port,colsendmsg.data,out);
 
@@ -246,7 +246,7 @@ int32 Column_open(const ST_COL_OPEN_REQ *req,ST_COL_OPEN_RPT *rpt)
     rpt->fd = req->fd;
     rpt->no = req->no;
     port = rpt->fd;
-    serialNo = req->addr;
+    serialNo = req->addr + 1;
     colsendmsg.cmd = COL_SEND_OPEN;
     colsendmsg.no = rpt->no;	
 	colsendmsg.goc=req->goc;	
