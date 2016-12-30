@@ -25,6 +25,6 @@ void unixserial_close(int fd);
 uint32 unixserial_read (int fd,char *pData,uint32 len);
 uint32 unixserial_write (int fd,const char* pData, uint32 len);
 void unixserial_clear(int fd);
-
+int unixserial_config(int fd,int baudRate);
 
 #endif

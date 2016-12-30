@@ -35,7 +35,7 @@ int32 DB_getCh(int32 fd,char *ch)
         i = yserial_read(fd,ch,1);
     }
 #endif
-    //EV_LOGD("DB_getCh:i=%d,ch=%d",i,*ch);
+    // EV_LOGD("DB_getCh:i=%d,ch=%d",i,*ch);
     return i;
 }
 

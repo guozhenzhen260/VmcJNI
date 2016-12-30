@@ -114,6 +114,7 @@ void yserial_closeByName(char *portName)
 int32 yserial_open(char *portName)
 {
     ST_PORT *port;
+    int res;
     port = yserialCreate(portName);
     if(port == NULL){
         EV_LOGE("yserial_open:port = NULL\n");
@@ -142,12 +143,19 @@ int32 yserial_open(char *portName)
         free(port);
         return -1;
     }
+    res = unixserial_config(port->fd,BAUD9600);
+    if (res != 1) {
+        EV_LOGD("unixserial_config error:fd=%d id=%d",port->fd,port->id);
+        return -1;
+    }
+#if 0
     unixserial_setBaudRate(port->fd,BAUD9600);
     unixserial_setDataBits(port->fd,DATA_8);
     unixserial_setStopBits(port->fd,STOP_1);
     unixserial_setParity(port->fd,PAR_NONE);
     unixserial_setFlowControl(port->fd,FLOW_OFF);
     unixserial_setTimeout(port->fd,10);
+#endif
     EV_LOGD("yserial_open:fd=%d id=%d",port->fd,port->id);
 #endif
     return port->id;

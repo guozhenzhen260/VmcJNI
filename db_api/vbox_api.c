@@ -130,6 +130,12 @@ static uint8 VBOX_recv(VBOX_MSG *msg,uint32 timeout)
 		}
 	}
 	msg->recvlen = index;
+    if (index > 0) {
+        EV_LOGW("\n############################################################");
+        EV_LOGW("#VBOX_recv read error....");
+
+    }
+
 	return 0;
 }
 
