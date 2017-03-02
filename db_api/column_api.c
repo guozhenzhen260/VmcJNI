@@ -23,6 +23,10 @@ int32 port;
 
 
 
+
+
+
+
 void COL_LOG(uint8 type,uint8 *data,uint8 len)
 {
 	uint8 i,buf[512] = {0};
@@ -203,6 +207,7 @@ uint8 Column_sendMsg()
 }
 
 
+
 /*********************************************************************************************************
 ** Function name	:		Column_open
 ** Descriptions		:		普通柜开门接口
@@ -230,7 +235,7 @@ int32 Column_open(const ST_COL_OPEN_REQ *req,ST_COL_OPEN_RPT *rpt)
     }
 	
 
-    memset((void *)rpt,0,sizeof(ST_BT_OPEN_RPT));
+    memset((void *)rpt,0,sizeof(ST_COL_OPEN_RPT));
     rpt->addr = req->addr;
     rpt->fd = req->fd;
     rpt->no = req->no;

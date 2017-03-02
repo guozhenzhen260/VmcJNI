@@ -371,6 +371,16 @@ int32  EV_API  EV_columnOpen(ST_COL_OPEN_REQ *req,ST_COL_OPEN_RPT *rpt)
 
 
 
+int32  EV_API  EV_column363xOpen(ST_COL_OPEN_REQ *req,ST_COL_OPEN_RPT *rpt)
+{
+    int32 res;
+    EV_LOGD("EV_column363xOpen:req=fd=%d,addr=%d,no=%d,goc=%d\n",(req)->fd,(req)->addr,(req)->no,(req)->goc);
+    res = Column363x_open(req,rpt);
+    EV_LOGD("EV_column363xOpen:res=%d,result=%02x",res,rpt->result);
+    return res;
+}
+
+
 
 
 /*********************************************************************************************************
