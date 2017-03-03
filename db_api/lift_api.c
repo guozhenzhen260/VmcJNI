@@ -567,7 +567,7 @@ static uint8 LIFT_send363x(ST_LIFT_MSG *msg)
     msg->recvlen = 0;
     LIFT_LOG(1,sendbuf,in);
     yserial_write(msg->port,(const char *)sendbuf,in);
-    res = LIFT_recv(msg,4000);
+    res = LIFT_recv(msg,2000);
     LIFT_LOG(2,msg->recvbuf,msg->recvlen);
     return res;
 }
@@ -646,7 +646,7 @@ int32 Column363x_open(const ST_COL_OPEN_REQ *req,ST_COL_OPEN_RPT *rpt)
 
     if(ret == LIFT_VENDOUT_COM_ERR){
         rpt->is_success = 1;
-        rpt->result = 0;
+        rpt->result = LIFT_VENDOUT_FAIL;
 
     }
     else{
