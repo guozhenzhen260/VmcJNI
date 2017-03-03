@@ -673,6 +673,7 @@ typedef struct {
 EV_EXPORT int32  EV_API  EV_columnOpen(ST_COL_OPEN_REQ *req,ST_COL_OPEN_RPT *rpt);
 
 
+EV_EXPORT int32  EV_API  EV_column363xOpen(ST_COL_OPEN_REQ *req,ST_COL_OPEN_RPT *rpt);
 
 
 /*********************************************************************************************************

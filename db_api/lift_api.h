@@ -47,7 +47,7 @@
 
 
 
-
+int32 Column363x_open(const ST_COL_OPEN_REQ *req,ST_COL_OPEN_RPT *rpt);
 uint8 LIFT_vendout(ST_COL_OPEN_REQ *req,ST_COL_OPEN_RPT *rpt);
 
 

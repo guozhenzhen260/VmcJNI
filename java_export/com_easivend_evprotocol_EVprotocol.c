@@ -454,9 +454,12 @@ JNIEXPORT jstring JNICALL Java_com_easivend_evprotocol_EVprotocol_EVtrade
 		case 1:
 			res = EV_columnOpen(&req,&rpt);
 			break;
-		case 3: case 4:
-			res = EV_liftVendout(&req,&rpt);
-			break;
+        case 3:
+            res = EV_liftVendout(&req,&rpt);
+            break;
+        case 4:
+            res = EV_column363xOpen(&req, &rpt);
+            break;
 		default:res = 0;break;
 	}
     

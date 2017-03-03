@@ -116,8 +116,10 @@ static uint8 LIFT_recv(ST_LIFT_MSG *msg,uint32 timeout){
 	int32 r;
 	uint8 *recvbuf;
 	index = 0;recvbuf = msg->recvbuf;
+
 	while(timeout > 0){
-		r = DB_getCh(msg->port,(char *)&ch);   
+        r = DB_getCh(msg->port,(char *)&ch);
+        //EV_LOGD("r=%02x,ch=%02x\n", r, ch);
 		if(r <= 0){
 			EV_msleep(50);
 			timeout = (timeout <= 50) ? 0 : timeout - 50;
@@ -535,6 +537,131 @@ uint8 LIFT_vendout(ST_COL_OPEN_REQ *req,ST_COL_OPEN_RPT *rpt)
 	return 1;
 
 }
+
+
+static uint8 LIFT_send363x(ST_LIFT_MSG *msg)
+{
+    uint8 i,res,in = 0;
+    uint16 crc = 0x0000;
+    uint8 *sendbuf;
+
+    in = 0;sendbuf = msg->sendbuf;
+    sendbuf[in++] = 0xC7;
+    sendbuf[in++] = 0x00;
+    sendbuf[in++] = msg->addr;
+    sendbuf[in++] = msg->cmd;
+    sendbuf[in++] = msg->addr;
+    sendbuf[in++] = 0x00;
+
+    for(i = 0;i < msg->datalen;i++){
+        sendbuf[in++] = msg->data[i];
+    }
+    sendbuf[I_LEN] = in;
+    crc	= crc16(sendbuf,in);
+    sendbuf[in++] = HUINT16(crc);
+    sendbuf[in++] = LUINT16(crc);
+
+    yserial_clear(msg->port);
+    //EV_msleep(100);
+    memset(msg->recvbuf,0,sizeof(msg->recvbuf));
+    msg->recvlen = 0;
+    LIFT_LOG(1,sendbuf,in);
+    yserial_write(msg->port,(const char *)sendbuf,in);
+    res = LIFT_recv(msg,4000);
+    LIFT_LOG(2,msg->recvbuf,msg->recvlen);
+    return res;
+}
+
+static int Column363x_send(ST_LIFT_MSG *msg)
+{
+    int res;
+    res = LIFT_send363x(msg);
+    if (res != 1) {
+#if 1
+        msg->cmd = VMC_VENDINGRESULT_REQ;
+        msg->data[0] = 1;
+        msg->datalen = 1;
+        res = LIFT_send363x(msg);
+        if (res != 1) {
+            return LIFT_VENDOUT_COM_ERR;
+        }
+        if (msg->recvbuf[3] != GCC_VENDINGRESULT_ACK) {
+            return LIFT_VENDOUT_DATAERR;
+        }
+        if (msg->recvbuf[7] == 0) {
+            return LIFT_VENDOUT_SUC;
+        }
+        else {
+            return LIFT_VENDOUT_EMPTY;
+        }
+#endif
+        //return LIFT_VENDOUT_COM_ERR;
+    }
+
+    if (msg->recvbuf[3] != GCC_VENDING_ACK) {
+        return LIFT_VENDOUT_DATAERR;
+    }
+
+    if (msg->recvbuf[7] == 0) {
+        return LIFT_VENDOUT_SUC;
+    }
+    else {
+        return LIFT_VENDOUT_EMPTY;
+    }
+}
+
+int32 Column363x_open(const ST_COL_OPEN_REQ *req,ST_COL_OPEN_RPT *rpt)
+{
+    int32 ret;
+    ST_LIFT_MSG mm;
+    ST_LIFT_MSG *msg = &mm;
+
+    if(req == NULL || rpt == NULL){
+        EV_LOGE("BT_open:s=%x,r=%x",(unsigned int)req,(unsigned int)rpt);
+        return 0;
+    }
+
+    if(req->addr <= 0){
+        EV_LOGE("Column363x_open:req->addr = %d",req->addr);
+        return 0;
+    }
+
+    if(req->no <= 0){
+        EV_LOGE("Column363x_open:req->no = %d",req->no);
+        return 0;
+    }
+
+    memset((void *)rpt,0,sizeof(ST_COL_OPEN_RPT));
+    rpt->addr = req->addr;
+    rpt->fd = req->fd;
+    rpt->no = req->no;
+    msg->port = rpt->fd;
+    msg->addr = 0x01;
+    msg->bin = req->addr;
+    msg->cmd = VMC_VENDING_REQ;
+    msg->data[0] = 1;
+    msg->data[1] = req->no;
+    msg->datalen = 2;
+    ret = Column363x_send(msg);
+
+    if(ret == LIFT_VENDOUT_COM_ERR){
+        rpt->is_success = 1;
+        rpt->result = 0;
+
+    }
+    else{
+        rpt->is_success = 1;
+        rpt->result = ret;
+
+    }
+   /* */
+    return 1;
+}
+
+
+
+
+
 
 
 
