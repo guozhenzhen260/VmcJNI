@@ -539,7 +539,7 @@ uint8 LIFT_vendout(ST_COL_OPEN_REQ *req,ST_COL_OPEN_RPT *rpt)
 }
 
 
-static uint8 LIFT_send363x(ST_LIFT_MSG *msg)
+static uint8 LIFT_send363x(ST_LIFT_MSG *msg, uint32 timeout)
 {
     uint8 i,res,in = 0;
     uint16 crc = 0x0000;
@@ -567,7 +567,7 @@ static uint8 LIFT_send363x(ST_LIFT_MSG *msg)
     msg->recvlen = 0;
     LIFT_LOG(1,sendbuf,in);
     yserial_write(msg->port,(const char *)sendbuf,in);
-    res = LIFT_recv(msg,2000);
+    res = LIFT_recv(msg, timeout);
     LIFT_LOG(2,msg->recvbuf,msg->recvlen);
     return res;
 }
@@ -575,13 +575,13 @@ static uint8 LIFT_send363x(ST_LIFT_MSG *msg)
 static int Column363x_send(ST_LIFT_MSG *msg)
 {
     int res;
-    res = LIFT_send363x(msg);
+    res = LIFT_send363x(msg, 5000);
     if (res != 1) {
 #if 1
         msg->cmd = VMC_VENDINGRESULT_REQ;
         msg->data[0] = 1;
         msg->datalen = 1;
-        res = LIFT_send363x(msg);
+        res = LIFT_send363x(msg, 2000);
         if (res != 1) {
             return LIFT_VENDOUT_COM_ERR;
         }
