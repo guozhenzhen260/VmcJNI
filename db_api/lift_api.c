@@ -52,6 +52,8 @@ ST_LIFT_MSG liftMsg;
 #define LIFT_VNEDOUT_DOOR_NOT_OPEN		5			//取货门未开启
 #define LIFT_VENDOUT_GOODS_NOT_TAKE		6			//货物未取走
 #define LIFT_VENDOUT_OTHER_FAULT		7			//其他故障
+#define LIFT_VENDOUT_GOC_ERR            8           //goc error
+
 #define LIFT_VENDOUT_VENDING			0x88		//正在出货
 
 
@@ -495,6 +497,85 @@ uint8 LIFT_vendoutReq(uint8 bin,uint8 row,uint8 column)
 }
 
 
+//goc
+uint8 LIFT_vendoutReq2(uint8 bin,uint8 row,uint8 column, uint8 goc)
+{
+    uint8 res,flow,tradeResult;
+    uint8 vendSent,isNotTalk,isTrading;
+    int32 timeout;
+
+    timeout = 60;flow = 0;
+    while(timeout > 0){
+        EV_LOGD("LIFT_vendoutReq:timeout=%d\n",timeout);
+        res = LIFT_vmcStatusReq(bin);
+        if(res == LIFT_STATUS_NORMAL){
+            flow = 1;
+            break;
+        }
+        else{
+            EV_msleep(1000);
+            timeout--;
+        }
+    }
+    if(flow == 0){ //有问题
+        return res;
+    }
+
+    // 3查询
+    isNotTalk = 0;
+    vendSent = 0;
+    isTrading = 0;
+    tradeResult = LIFT_VENDOUT_FAIL;
+    timeout = 180;
+    while(timeout > 0){
+        if(vendSent == 0){
+            // 2 出货
+            res = LIFT_vendoutSendMsg(bin,row,column);
+            if(res != 1){
+                return LIFT_VENDOUT_COM_ERR;
+            }
+            vendSent = 1;
+            EV_msleep(500);
+        }
+        else{
+            res = LIFT_vmcVedingResult(bin);//检测出货结果
+            if(res > 0 && res != LIFT_VENDOUT_VENDING){ //出货结果
+                tradeResult = res;
+                if(res == LIFT_VENDOUT_GOODS_NOT_TAKE && isTrading == 0){
+                    EV_msleep(2000);
+                    timeout -= 2;
+                    isNotTalk = 1;
+                    vendSent = 0;//re send
+                }
+                else{
+                    if (goc == 0) {
+                        if (res == LIFT_VENDOUT_GOC_ERR) {
+                            res = LIFT_VENDOUT_SUC;
+                        }
+                        else {
+                            res = LIFT_VENDOUT_FAULT;
+                        }
+                    }
+                    return res;
+                }
+            }
+            else{
+                if(isNotTalk == 1){
+                    isNotTalk = 0;
+                    isTrading = 1;
+                    timeout += 60;
+                }
+                EV_msleep(1000);
+                timeout--;
+            }
+        }
+    }
+
+    return tradeResult;
+}
+
+
+
 
 
 
@@ -529,7 +610,7 @@ uint8 LIFT_vendout(ST_COL_OPEN_REQ *req,ST_COL_OPEN_RPT *rpt)
 
 	row = rpt->no / 10;
 	col = rpt->no % 10;
-	ret = LIFT_vendoutReq(msg->bin,row,col);
+    ret = LIFT_vendoutReq2(msg->bin,row,col, req->goc);
 	
    	rpt->is_success = 1;
     rpt->result = ret;
