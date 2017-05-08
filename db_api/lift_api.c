@@ -53,6 +53,7 @@ ST_LIFT_MSG liftMsg;
 #define LIFT_VENDOUT_GOODS_NOT_TAKE		6			//货物未取走
 #define LIFT_VENDOUT_OTHER_FAULT		7			//其他故障
 #define LIFT_VENDOUT_GOC_ERR            8           //goc error
+//#define LIFT_VENDOUT_GOC_ERR            8           //goc error
 
 #define LIFT_VENDOUT_VENDING			0x88		//正在出货
 
@@ -318,6 +319,9 @@ uint8 LIFT_vmcVedingResult(uint8 bin)
 		else if(temp == 0x07){
 			return LIFT_VENDOUT_OTHER_FAULT;
 		}
+        else if (temp == 0x0A) {
+            return LIFT_VENDOUT_GOC_ERR;
+        }
 		else{
 			return LIFT_VENDOUT_OTHER_FAULT;
 		}
@@ -548,13 +552,8 @@ uint8 LIFT_vendoutReq2(uint8 bin,uint8 row,uint8 column, uint8 goc)
                     vendSent = 0;//re send
                 }
                 else{
-                    if (goc == 0) {
-                        if (res == LIFT_VENDOUT_GOC_ERR) {
-                            res = LIFT_VENDOUT_SUC;
-                        }
-                        else {
-                            res = LIFT_VENDOUT_FAULT;
-                        }
+                    if (goc == 0 && LIFT_VENDOUT_GOC_ERR) {
+                        res = LIFT_VENDOUT_SUC;
                     }
                     return res;
                 }
