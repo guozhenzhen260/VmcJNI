@@ -115,6 +115,15 @@ int32  EV_API  EV_mdbHeartCheck(ST_MDB_HEART_REQ *req,ST_MDB_HEART_RPT *rpt)
     return res;
 }
 
+int32  EV_API  EV_readButtonStatus(ST_MDB_BUTTON_REQ *req,ST_MDB_BUTTON_RPT *rpt)
+{
+    int32 res;
+    //EV_LOGD("EV_readButtonStatus req=%x\n",(unsigned int)req);
+    res = MDB_read_button_status(req,rpt);
+    //EV_LOGD("EV_readButtonStatus:res=%d",res);
+    return res;
+}
+
 
 
 /*********************************************************************************************************

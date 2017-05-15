@@ -793,6 +793,35 @@ int32 MDB_coin_config(const ST_MDB_COIN_CON_REQ *req,ST_MDB_COIN_CON_RPT *rpt)
 }
 
 
+int32 MDB_read_button_status(ST_MDB_BUTTON_REQ *req, ST_MDB_BUTTON_RPT *rpt)
+{
+    uint8 in = MT + 1,res,out = MT + 2;
+    uint8 *buf;
+    if(req == NULL || req == NULL){
+        EV_LOGE("MDB_heart_check:s=%x,r=%x",(unsigned int)req,(unsigned int)rpt);
+        return 0;
+    }
+    memset(rpt,0,sizeof(ST_MDB_BUTTON_RPT));
+    rpt->fd = req->fd;
+    send_msg.port = req->fd;
+    send_msg.type = DB_MT_CHECK_REQ;
+    send_msg.data[in++] = MDB_KEY_CHECK_REQ;
+    send_msg.len = in;
+    MDB_package(&send_msg);
+    res = MDB_sendMsg(&send_msg,&recv_msg,5000);
+    if(res != 1){
+        EV_LOGE("MDB_read_button_status:Timeout...");
+        return 0;
+    }
+
+    buf = recv_msg.data;
+    if(buf[MT] != DB_MT_CHECK_RPT || buf[MT + 1] != MDB_KEY_CHECK_RPT){
+        EV_LOGE("MDB_read_button_status:buf[MT]=%x,buf[MT+1]=%x",buf[MT],buf[MT + 1]);
+        return 0;
+    }
+    rpt->paipai = buf[out++];
+    return 1;
+}
 
 /*********************************************************************************************************
 ** Function name:     	MDB_heart_check

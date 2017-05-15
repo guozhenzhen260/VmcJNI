@@ -193,9 +193,18 @@ EV_EXPORT int32  EV_API  EV_mdbEnable(ST_MDB_ENABLE_REQ *req,ST_MDB_ENABLE_RPT *
 //============================End=======================================================================//
 
 
+typedef struct {
+    int32   fd;           //串口 编号
+}ST_MDB_BUTTON_REQ;
+typedef struct {
+    int32   fd;           //串口 编号
+    int32   res;
+    int32   paipai;
+}ST_MDB_BUTTON_RPT;
 
-
+EV_EXPORT int32  EV_API  EV_readButtonStatus(ST_MDB_BUTTON_REQ *req,ST_MDB_BUTTON_RPT *rpt);
 //============================MDB现金设备心跳查询接口============================================================//
+
 
 /*********************************************************************************************************
 ** MDB_INIT   MDB现金设备心跳查询请求包结构体

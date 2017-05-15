@@ -58,6 +58,8 @@
 #define 	MDB_INFO_REQ 		0x04
 #define 	MDB_INFO_RPT		0x04
 
+#define 	MDB_KEY_CHECK_REQ 		0x05
+#define 	MDB_KEY_CHECK_RPT 		0x05
 
 #define 	DB_MT_ACTION_REQ	0x22
 #define 	DB_MT_ACTION_RPT	0x92
@@ -146,7 +148,7 @@
 
 
 
-
+int32 MDB_read_button_status(ST_MDB_BUTTON_REQ *req, ST_MDB_BUTTON_RPT *rpt);
 int32 MDB_heart_check(ST_MDB_HEART_REQ *req,ST_MDB_HEART_RPT *rpt);
 int32 MDB_coin_info_check(const ST_MDB_COIN_INFO_REQ *req,ST_MDB_COIN_INFO_RPT *rpt);
 int32 MDB_bill_info_check(const ST_MDB_BILL_INFO_REQ *req,ST_MDB_BILL_INFO_RPT *rpt);

@@ -44,6 +44,7 @@
 #define EV_MDB_B_CON        29      //MDBÖ½±ÒÆ÷ÅäÖÃ
 #define EV_MDB_C_CON        30      //MDBÓ²±ÒÆ÷ÅäÖÃ
 #define EV_MDB_HP_PAYOUT    31      //hopperÓ²±ÒÆ÷ÕÒ±Ò
+#define EV_MDB_KEY_HEART    32      //
 #define EV_VBOX_TYPE        911
 #define EV_CMD_FAIL         9998
 #define EV_JSON_ERR         9999
@@ -668,6 +669,46 @@ JNIEXPORT jstring JNICALL Java_com_easivend_evprotocol_EVprotocol_EVmdbHeart
     }
     else{
         cJSON_AddNumberToObject(entry,"is_success",0);
+    }
+
+    text = cJSON_Print(root);
+    cJSON_Delete(root);
+    if(text != NULL){
+        msg = (*env)->NewStringUTF(env,text);
+        free(text);
+    }
+    else{
+        msg = (*env)->NewStringUTF(env,"{\"EV_json\":{\"EV_type\":9999}}");
+    }
+
+    return msg;
+}
+
+
+
+JNIEXPORT jstring JNICALL Java_com_easivend_evprotocol_EVprotocol_EVreadButtonStatus
+  (JNIEnv *env, jclass cls, jint fd)
+{
+    ST_MDB_BUTTON_REQ req;
+    ST_MDB_BUTTON_RPT rpt;
+    int res;
+    jstring msg;
+    char *text = NULL;
+    cJSON *root,*entry;
+    req.fd = fd;
+    res = EV_readButtonStatus(&req,&rpt);
+    root=cJSON_CreateObject();
+    entry = cJSON_CreateObject();
+    cJSON_AddItemToObject(root, JSON_HEAD, entry);
+    cJSON_AddNumberToObject(entry,JSON_TYPE,EV_MDB_KEY_HEART);
+    cJSON_AddNumberToObject(entry,"port_id",rpt.fd);
+    if(res == 1){
+        cJSON_AddNumberToObject(entry,"is_success",1);
+        cJSON_AddNumberToObject(entry,"paipai_key",rpt.paipai);
+    }
+    else{
+        cJSON_AddNumberToObject(entry,"is_success",0);
+        cJSON_AddNumberToObject(entry,"paipai_key",0);
     }
 
     text = cJSON_Print(root);
