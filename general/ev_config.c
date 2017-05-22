@@ -23,7 +23,7 @@ int EV_createLog()
     }
 #endif
 #ifdef EV_ANDROID
-    int len = strftime( date , sizeof(date) - 1 , "/mnt/sdcard/logs/EV_%Y%m%d.log" , &stime ) ;
+    int len = strftime( date , sizeof(date) - 1 , "/sdcard/yoclogs/EV_%Y%m%d.log" , &stime ) ;
 #else
     int len = strftime( date , sizeof(date) - 1 , "EV_%Y%m%d.log" , &stime ) ;
 #endif
