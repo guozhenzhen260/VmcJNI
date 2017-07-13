@@ -28,7 +28,7 @@ int32   EV_API  EV_portRegister(int8 *portName)
     int32 fd;
     fd = yserial_open(portName);
     if(fd == -1){
-        EV_LOGE("Port[%s]:open fail!\n",portName);
+        EV_LOGE("PortName[%s]:open fail!\n",portName);
         return -1;
     }
     yserial_setParity(fd,PAR_NONE);
@@ -38,7 +38,7 @@ int32   EV_API  EV_portRegister(int8 *portName)
     yserial_setTimeout(fd,10);
     yserial_clear(fd);
 
-    EV_LOGI("Port[%s]:open suc!\n",yserial_getPortName(fd));
+    EV_LOGI("PortName[%s]:open suc!\n",yserial_getPortName(fd));
     return fd;
 }
 
@@ -62,7 +62,7 @@ void   EV_API  EV_portReleaseByName(char *portName)
 	}
 
     yserial_closeByName(portName);
-    EV_LOGI("Port_no[%s]:released!\n",portName);
+    EV_LOGI("Port_portName[%s]:released!\n",portName);
 }
 
 

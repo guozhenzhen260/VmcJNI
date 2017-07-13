@@ -797,7 +797,7 @@ int32 MDB_read_button_status(ST_MDB_BUTTON_REQ *req, ST_MDB_BUTTON_RPT *rpt)
 {
     uint8 in = MT + 1,res,out = MT + 2;
     uint8 *buf;
-    if(req == NULL || req == NULL){
+    if(req == NULL || rpt == NULL){
         EV_LOGE("MDB_heart_check:s=%x,r=%x",(unsigned int)req,(unsigned int)rpt);
         return 0;
     }
