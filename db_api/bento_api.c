@@ -121,8 +121,15 @@ static uint8 BT_send(BENTO_MSG *msg)
     msg->data[out++] = msg->addr;
     msg->data[out++] = msg->cmd;
     msg->data[out++] = msg->addr;
-    msg->data[out++] = msg->addr;//0x08;
-    msg->data[out++] = msg->arg;//0x00;
+    if (msg->cmd == BT_CHECK) {
+        msg->data[out++] = msg->addr;
+        msg->data[out++] = msg->addr;
+    }
+    else {
+        msg->data[out++] = 0x05;
+        msg->data[out++] = msg->arg;
+    }
+
     crc = BT_crcCheck(msg->data,out);
     msg->data[out++] = HUINT16(crc);
     msg->data[out++] = LUINT16(crc);
