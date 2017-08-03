@@ -301,7 +301,7 @@ uint8 LIFT_vmcVedingResult(uint8 bin)
 		else if(temp == 0x01){
 			return LIFT_VENDOUT_DATAERR;
 		}
-		else if(temp == 0x02){
+        else if(temp == 0x02){
 			return LIFT_VENDOUT_EMPTY;
 		}
 		else if(temp == 0x03){
@@ -552,7 +552,7 @@ uint8 LIFT_vendoutReq2(uint8 bin,uint8 row,uint8 column, uint8 goc)
                     vendSent = 0;//re send
                 }
                 else{
-                    if (goc == 0 && LIFT_VENDOUT_GOC_ERR) {
+                    if (goc == 0 && res == LIFT_VENDOUT_GOC_ERR) {
                         res = LIFT_VENDOUT_SUC;
                     }
                     return res;
@@ -569,7 +569,7 @@ uint8 LIFT_vendoutReq2(uint8 bin,uint8 row,uint8 column, uint8 goc)
             }
         }
     }
-
+    EV_LOGE("LIFT_vendoutReq2: timeout====%d", tradeResult);
     return tradeResult;
 }
 
@@ -609,6 +609,7 @@ uint8 LIFT_vendout(ST_COL_OPEN_REQ *req,ST_COL_OPEN_RPT *rpt)
 
 	row = rpt->no / 10;
 	col = rpt->no % 10;
+    EV_LOGD("LIFT_vendout:bin=%d,row=%d,col=%d,goc=%d",msg->bin,row,col, req->goc);
     ret = LIFT_vendoutReq2(msg->bin,row,col, req->goc);
 	
    	rpt->is_success = 1;
